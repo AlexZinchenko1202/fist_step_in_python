@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7" lang="ru-RU">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" lang="ru-RU">
+<![endif]-->
+<!--[if !(IE 7) & !(IE 8)]><!-->
+<html lang="ru-RU"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>5.5&nbsp; Электронные платежные системы  и принципы их работы | Электронная библиотека</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<!--<link rel="shortcut icon" href="http://libraryno.ru/favicon.ico">-->
+	<link rel="icon" href="http://libraryno.ru/tube-sample-152-214209.png" sizes="32x32">
+	<script src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/osd.js"></script><script src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/ca-pub-1597117985458814.js"></script><script src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/show_ads_impl.js" id="google_shimpl"></script><script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/jquery_002.js"></script>
+
+	<link rel="pingback" href="http://libraryno.ru/xmlrpc.php">
+	<!--[if lt IE 9]>
+	<script src="http://libraryno.ru/wp-content/themes/twentyfourteen/js/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" id="twentyfourteen-lato-css" href="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/css.css" type="text/css" media="all">
+<link rel="stylesheet" id="genericons-css" href="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/genericons.css" type="text/css" media="all">
+<link rel="stylesheet" id="twentyfourteen-style-css" href="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/style.css" type="text/css" media="all">
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentyfourteen-ie-css'  href='http://libraryno.ru/wp-content/themes/twentyfourteen/css/ie.css?ver=20131205' type='text/css' media='all' />
+<![endif]-->
+<script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/jquery.js"></script>
+<script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/jquery-migrate.js"></script>
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://libraryno.ru/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="5.4&nbsp; Интернет-магазин" href="http://libraryno.ru/5-4-internet-magazin-mir2/">
+<link rel="next" title="Моделирование электронных схем на ЭВМ" href="http://libraryno.ru/mod_el_shem/">
+<meta name="generator" content="WordPress 4.1.26">
+<link rel="canonical" href="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/a_004.html">
+<link rel="shortlink" href="http://libraryno.ru/?p=7204">
+<meta name="description" content="Информатика и вычислительная техника / Мировые информационные ресурсы / 5.5&nbsp; Электронные платежные системы  и принципы их работы  Развитие электронной торговли способствовало появлению электронных платежных систем, которые позволяют оплатить покупку ">	
+	<style>
+	.tn_left{
+		overflow: hidden;
+	}
+	
+	.teas_dt{
+		
+	}
+	
+	.teas_2{
+		float:left;
+		width:40px;
+	}
+	
+	.other{
+		
+	}
+	
+	.other_block{
+		margin-top: -30px;
+		height:35px;
+		width: 110px;
+		overflow: hidden;
+	}
+	
+	
+	.next_block{
+		display: block;
+	}
+	
+	
+</style>
+
+<script>
+	
+
+		
+	$(document).ready(function() {
+		$('.teas_dt').css('opacity', '0');
+
+	/*
+	$(document).ready(function() {
+	//	$('.teas_dt').css('opacity', '0');
+	//	$('.tn_left').css('opacity', '0');
+	//	$('.tn_left').css('height', '10px');
+	*/
+	
+		function rant(){
+			return Math.round(Math.random() * 100);
+		}
+
+		
+		if(rant() <= 85 ){
+			$('.next_block').show();
+			//$('.other_block').show();
+			//	$('.teas_dt').html($('.tn_left').html());
+		}else{
+			$('.next_block').hide();
+			//$('.other_block').show();
+		}
+	});
+	
+	
+	</script>
+	
+	
+<link rel="preload" href="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/integrator.js" as="script"><script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/integrator.js"></script><link rel="preload" href="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/integrator_002.js" as="script"><script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/integrator_002.js"></script><link rel="preload" href="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/show_ads_impl.js" as="script"></head>
+
+<body class="single single-post postid-7204 single-format-standard masthead-fixed full-width singular">
+<div id="page" class="hfeed site">
+	
+	<header id="masthead" class="site-header" role="banner">
+		<div class="header-main">
+			<h1 class="site-title"><a href="http://libraryno.ru/" rel="home">Электронная библиотека</a></h1>
+
+			<div class="search-toggle">
+				<a href="#search-container" class="screen-reader-text">Поиск</a>
+			</div>
+
+			<nav id="primary-navigation" class="site-navigation primary-navigation" role="navigation">
+				<button class="menu-toggle">Основное меню</button>
+				<a class="screen-reader-text skip-link" href="#content">Перейти к содержимому</a>
+				<div class="nav-menu"><ul><li class="page_item page-item-474"><a href="http://libraryno.ru/">Научно-образовательная литература</a></li></ul></div>
+			</nav>
+		</div>
+
+		<div id="search-container" class="search-box-wrapper hide">
+			<div class="search-box">
+				<form role="search" method="get" class="search-form" action="http://libraryno.ru/">
+				<label>
+					<span class="screen-reader-text">Найти:</span>
+					<input type="search" class="search-field" placeholder="Поиск…" name="s" title="Найти:">
+				</label>
+				<input type="submit" class="search-submit" value="Поиск">
+			</form>			</div>
+		</div>
+	</header><!-- #masthead -->
+
+	<div id="main" class="site-main">
+
+	<div id="primary" class="content-area">
+		<div id="content" class="site-content" role="main">
+			
+
+
+<article id="post-7204" class="custom_post">
+
+	
+	<header class="entry-header">
+				
+					
+
+			
+						
+				<div class="br_goo_1" style="margin-top:-30px; margin-bottom:-10px; margin-left:0px;">	
+					<script async="" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/adsbygoogle.js"></script>
+					
+					<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-1597117985458814" data-ad-slot="9584514837" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0px;width:728px;height:90px;" width="728" height="90" frameborder="0"></iframe></ins></ins></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+				
+						
+
+			<!--
+			<div class="entry-meta">
+				<span class="cat-links">
+								</span>
+			</div>
+			-->
+			
+			<h1 class="custom_h1">5.5&nbsp; Электронные платежные системы  и принципы их работы</h1>		
+		<div class="entry-meta">
+						
+		</div><!-- .entry-meta -->
+		
+		<div class="taxonomy-description" style="margin-top:-20px; margin-left:30px; font-size:13px;">
+					</div>
+		
+		
+	</header><!-- .entry-header -->
+
+		
+	
+	
+	<div class="entry-content">
+		<div style="padding: 5px; background: #f5f5f5; border-radius:4px;" class="navi_block"><a href="http://libraryno.ru/category/informatika_i_vychislitelnaja_tehnika/">Информатика и вычислительная техника</a> / <a href="http://libraryno.ru/mir2/">Мировые информационные ресурсы</a> / 5.5&nbsp; Электронные платежные системы  и принципы их работы</div>
+<p> 
+</p><p>Развитие электронной торговли способствовало появлению 
+электронных платежных систем, которые позволяют оплатить покупку в 
+Интернет из дома. Общее название «платежные системы» объединяет разные 
+виды онлайновых платежей. Наиболее распространены кредитные системы, 
+позволяющие использовать в сети обычные кредитные карты.</p>
+<p>Технология кредитных карт, обслуживающая расчеты по пластиковым 
+картам, представлена в России такими системами, как Assist и CyberPlat 
+(рис. 5.2). Схема работы такой системы выглядит следующим образом: 
+клиент получает возможность совершать покупки в Интернет-магазинах и 
+оплачивать их в режиме реального времени либо со своего счета в банке, 
+либо по своей банковской карте, получать выписки и результаты платежей. 
+Клиент может непосредственно через Интернет оформить платежное 
+поручение, позволяющее выполнить банковский перевод на любой счет в 
+любом российском банке. Таким образом можно перевести средства из 
+системы на свой счет в любой другой банк или оплатить типовые услуги, 
+например операторов состовой связи или Интернет-провайдеров.</p>
+<p>Другую нишу на рынке электронных платежей занимают системы, 
+использующие электронные деньги. Как было отмечено в подразделе 5.3, 
+суть таких денег заключается в введении цифрового эквивалента реальных 
+денег, с помощью которого осуществляются расчеты. Во многих случаях эта 
+технология более удобна, особенно при оплате небольших покупок, которые 
+составляют большую часть на рынке товаров. Кроме того, такие системы 
+привлекательны тем, что они анонимны и не требуют подтверждения третьей 
+стороны. </p>
+<p>Технология цифровых наличных представлена в России такими системами, 
+как PayCash и WebMoney. Схема работы этих систем выглядит так: клиент 
+открывает «электронный кошелек» в «электронном банке» (открытие счета 
+производится по Интернет «из дома») и переводит на этот счет деньги 
+(внесением наличных в кассу банка, банковским или почтовым переводом, 
+при помощи кредитной карты, и, наконец, другой клиент может заплатить 
+ему в рамках системы). После этого он становиться клиентом. Чтобы иметь 
+возможность расплачиваться в рамках системы, клиент создает у себя в 
+компьютере одну или несколько платежных книжек. Затем клиент переводит</p>
+<p>некоторую сумму денег со своего счета на одну из книжек, то есть в 
+свой компьютер. Теперь клиент готов расплачитваться в сети, причем 
+анонимно, теми деньгами, которые лежат на его платежных книжках. Каждый 
+платеж авторизуется банком.</p>
+<p></p>
+<p><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/pic91_1.jpg" width="534" height="417"></p>
+<p>Рис. 5.2 Страница платежной системы CyberPlat</p>
+<p></p>
+<p>С помощью «электронного кошелька» удобно расплачиваться в 
+Интернет-магазинах, принимающих электронные деньги. Кроме того, если 
+клиент заплатил «с протекцией торговой сделки», деньги продавец получает
+ только после доставки товара, то есть защита покупателя заложена в 
+системе алгоритмически.</p>
+<p>Рассмотрим некоторые платежные системы.</p>
+<p><b><i>«</i></b><b><i>CyberPlat»</i></b> – это универсальная 
+мультибанковская интегрированная система платежей в Интернет, которая 
+обеспечивает весь спектр финансовых услуг – от микроплатежей до 
+межбанковских расчетов.</p>
+<p>Основными свойствами системы «CyberPlat» являются:</p>
+<p>1) интегрированность – система объединяет различные инструменты для ведения бизнеса в сети Интернет:</p>
+<p>- «CyberPlat» – подсистема обслуживания транзакций класса «бизнес» 
+для бизнеса с элементами электронного документооборота для клиентов, 
+зарегистрированных в «CyberPlat»;</p>
+<p></p>
+<p>- «CyberPlat» – подсистема обслуживания платежей по пластиковым 
+картам международных и российских платежных систем, ориентированная на 
+услуги «бизнес» для потребителя и не требующая регистрации покупателей в
+ системе «CyberPlat»;</p>
+<p>- Интернет-банкинг – управление счетом в банке-участнике системы 
+через Интернет (более подробно об этом пойдет речь в подразделе 5.6);</p>
+<p>2) мультибанковость – система «CyberPlat» допускает участие в ней 
+неограниченного количества банков, открыта для взаимодействия с любыми 
+другими платежными системами и в отличие от многих из них обеспечивает 
+поддержку множества процессинговых центров. <b><i>Процессинговый центр – </i></b>это
+ юридическое лицо или его структурное подразделение, обеспечивающее 
+информационное и технологическое взаимодействие между участниками 
+расчетов. Сбор, обработка и рассылка участникам расчетов информации по 
+операциям с банковскими картами называют <b><i>процессингом</i></b>;</p>
+<p>3) универсальность – система полволяет использовать различные 
+платежные инструменты: пластиковые карты международных и платежных 
+систем, в том числе Visa, Europay, Diners Club, JCB, American Express, 
+Union Card, единые карты e-port, а также платежи непосредственно с 
+банковских счетов плательщиков в банках – участниках системы на любой 
+банковский счет, в том числе внешний.</p>
+<p>«CyberPlat» гарантирует полную конфиденциальность транзакций и недоступность платежных реквизитов для посторронних.</p>
+<p><b><i>«</i></b><b><i>Assist»</i></b> представляет собой систему, 
+которая позволяет в реальном времени проводить авторизацию и процессинг 
+платежей, совершаемых при помощи кредитных карт с любого компьютера, 
+подключенного к Интернет. Являясь мультибанковской системой проведения 
+платежей по пластиковым и виртуальным картам через Интернет, «Assist» 
+занимает лидирующее положение на российском рынке и проводит более 80 % 
+всех Интернет-транзакций. Никакого дополнительного программного 
+обеспечения, кроме браузера, устанавливать не требуется. В качестве 
+серверного программного обеспечения используется DynaSite. Все расчеты 
+проводятся через бэк-офис CyberPlat. Для обеспечения безопаности 
+передаваемых данных от покупателя в Assist используется протокол SSL 
+(Secure Socket Layer). Система не анонимна, но конфиденциальная 
+информация о кредитной карте клиента (реквизиты) в интернет-магазин не 
+передается.</p>
+<p><b><i>«Рапида»</i></b> обеспечивает частным лицам, банкам, торговым и сервисным предприятиям возможность дистанционного платежного сервиса (удаленного</p>
+<p>управления банковскими счетами, универсальными платежными картами и 
+денежными переводами). Технологии и принципы работы системы построены на
+ использовании&nbsp; удаленного управления средствами в режиме реального
+ времени, без открытия дополнительных банковских счетов. Оплатить товары
+ или услуги (мобильную, междугороднюю или международную связь, счета за 
+коммунальные и страховые услуги, доступ в Интернет, пользование платными
+ информационными материалами, покупки в Интернет-магазинах и др.) можно 
+круглосуточно по стационарному или мобильному телефону, а такжу через 
+Интернет. Воспользоваться услугами системы можно с помощью универсальной
+ платежной карты «Рапида». Она объединяет в себе возможность оплаты 
+доступа в Интернет, междугородных переговоров, покупок в 
+Интернет-магазинах.</p>
+<p><b><i>«</i></b><b><i>WebMoney </i></b><b><i>Transfer»</i></b> – 
+универсальная внебанковская система, позволяющая проводить мгновенные 
+расчеты в сети Интернет. Система открыта для свободного использования 
+всеми желающими и не имеет никаких территориальных ограничений. 
+Средством расчета в системе служат титульные знаки WebMoney, 
+стабильность курса и ликвидность которых обеспечиваются гарантами. В 
+настоящее время гарантами WebMoney являются:</p>
+<p>· в России – автономная некоммерческая организация «ВМ-Центр» (реализует хождение в системе «WebMoney Transfer» типа R);</p>
+<p>· в США – компания IMTB Inc. (реализует хождение в системе WebMoney типа Z). </p>
+<p>Один WebMoney (WM) типа R эквивалентен стоимости одному российскому 
+рублю, 1 WM типа Z – одному доллару США, 1 WM типа E – одному евро.</p>
+<p>Все WebMoney, имеющиеся в системе, хранятся на электронных счетах 
+(кошельках) ее участников (WM типа R – эквивалент RUR – на R-кошельках, 
+WM типа Z – эквивалент USD – на Z-кошельках). При этом финансовые 
+расчеты между участниками осуществляется только с использованием 
+однотипных кошельков. Хранящие на кошельках WebMoney в любой момент 
+могут быть выведены из системы с конвертацией в валюту соответствующего 
+им типа путем безналичного платежа на банковский счет, указанный их 
+владельцем. <br>
+						</p><div class="br_goo_2" style="">
+							<script async="" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/adsbygoogle.js"></script>
+							<!-- Полный баннер -->
+							<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-1597117985458814" data-ad-slot="9584514837" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0px;width:728px;height:90px;" width="728" height="90" frameborder="0"></iframe></ins></ins></ins>
+							<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+							</script>
+						</div>
+					<br>Получить WM можно: <p></p>
+<p>· у гарантов путем безналичного перевода из любого банка, в том числе
+ Сбербанка России, а также почтовым переводом на расчетный счет гаранта с
+ указанием номера пополняемого кошелька (денежные средства будут 
+автоматически конвертированы в WM и зачислены на указанный при переводе 
+кошелек);</p>
+<p></p>
+<p>· через предоплаченную WM-карту (пополнение Z-кошельков);</p>
+<p>· от кого-либо из участников системы в обмен на товары, услуги или же в обмен на наличные деньги.</p>
+<p>С помощью «WebMoney Transfer» можно совершать покупки в электронных 
+магазинах, создавать собственные магазины, реализующие продажи в режиме 
+реального времени в Интернет, а также производить расчеты с другими 
+участниками системы. «WebMoney Transfer» имеет высокую степень защиты: 
+вся информация, передаваемая по каналам Интернет, кодирована по 
+алгоритму, эквивалентному RSA (см. подраздел 5.8), с длинной ключа 1040 
+битов.</p>
+<p><b><i>«</i></b><b><i>PayCash».</i></b> Учстниками этой платежной 
+системы являются банк (компания-оператор системы) и клиенты. В качестве 
+клиентов могут выступать физические и юридические лица, а также роботы –
+ автономно функционирующие компьютерные программы, играющие роль 
+магазинов, казино, дилинговых центров, букмекерских контор и т.д., 
+действующие от имени тех и других. Для банка все клиенты равноправны. В 
+частности, чтобы иметь возможность принимать платежи, клиенту не 
+требуется никакого особого статуса «магазина». Все свои операции в 
+рамках системы «PayCash» клиент проводит при помощи специального 
+программного обеспечения «Кошелек». Участники системы взаимодействуют 
+между собой посредством пересылки сообщений по Интернет. </p>
+<p>Будущий клиент при помощи «Кошелька» открывает счет в банке и 
+переводит на этот счет деньги. После этого он становится клиентом. Чтобы
+ иметь возможность расплачиваться в рамках системы «PayCash», клиент 
+создает у себя на компьютере при помощи «Кошелька» одну или несколько 
+платежных книжек. Затем опять же при помощи «Кошелька» переводит 
+некоторую сумму денег со своего счета на одну из книжек, то есть в свой 
+компьютер. При этом банк не может определить, на какую книжку 
+переводятся деньги. Кроме того, банк не знает, кому принадлежат 
+конкретные платежные книжки. Теперь клиент готов расплачиваться в 
+Интернет, причем анонимно, теми деньгами, которые лежат на его платежных
+ книжках. Каждый платеж авторизуется банком. </p>
+<p>Цепочка сообщений во время платежа имеет следующий вид: </p>
+<p>Продавец – покупатель – продавец – банк – продавец – покупатель.</p>
+<p>На первом шаге продавец просит деньги у покупателя, причем в запрос 
+включен подписанный контракт сделки. На втором шаге покупатель отсылает 
+продавцу данные платежа. Далее продавец отсылает данные платежа в банк 
+для авторизации. Банк</p>
+<p>проводит необходимые проверки и отправляет продавцу квитанцию, а 
+также квитанцию для покупателя. Продавец сообщает покупателю свое 
+решение и пересылает ему данные, зашифрованные банком на имя покупателя.
+ </p>
+<p>Следует иметь в виду, что в системе «PayCash» клиент получает в свое 
+распоряжение электронные наличные, которые, как и обычные бумажные 
+деньги, можно потерять. Например, если компьютер клиента «сгорит» или 
+его украдут, то клиент лишится всех денег, которые он перевел в свой 
+компьютер и не успел потратить. Однако если у благоразумного клиента 
+сохранились резервные копии параметров «Кошелька» для последнего 
+перевода денег со счета в компьютер, то он может восстановить свои 
+деньги. </p>
+<p>Таким образом PayCash – это система анонимных электронных денег, а не
+ просто система «клиент-банк». Это выражается еще и в том, что банк не 
+может, например, по требованию суда, воспрепятствовать клиенту тратить 
+электронные деньги, которые тот успел перевести в свой компьютер, иначе,
+ как прекратив все платежи в системе. Если клиенту требуется вывести 
+свои деньги за пределы системы PayCash, он подает команду перевести 
+часть или все средства со своего счета в банке системы на счет в 
+каком-нибудь невиртуальном банке, где он сам или его представитель может
+ физически их получить. При пересылке по сети все данные шифруются 
+открытыми ключами не короче чем 1024 битов и симметричными ключами не 
+короче чем 128 битов, поэтому перехват зашифрованных сообщений в 
+обозримом будущем вычислительно невозможен. При реализации системы 
+предусмотрены также меры предосторожности, ограждающие клиента от 
+попыток похитить информацию непосредственно с его компьютера.</p>
+<p><b><i>«Яндекс.Деньги»</i></b>. Данная система (рис. 5.3) представляет
+ собой не просто сочетание надежной технологии PayCash и многомиллионной
+ аудитории Yandex, но и партнерство с сотнями участников. Среди 
+партнеров – банки, провайдеры Интернет, Интернет-магазины, почта, 
+коммунальные службы, другие платежные системы. Партнерская программа 
+открыта для всех.</p>
+<p></p>
+<p><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/pic96_1.jpg" width="308" height="248"></p>
+<p>Рис. 5.3 Схема работы системы «Яндекс.Деньги»</p>
+<p></p>
+<p>Чтобы стать участником системы, вам совсем необязательно иметь счет в
+ банке или кредитную карточку, достаточно пройти регистрацию в платежной
+ системе «Яндекс.Деньги» (рис. 5.3). При этом в платежной системе 
+автоматически будет открыт счет, связанный с вашим «Кошельком». На этот 
+счет вы зачисляете любым удобным для вас способом свои деньги, после 
+чего вы можете проводить расчеты, можете сами получать деньги в свой 
+«Кошелек» от кого-либо. Электронные деньги с виртуального счета вы при 
+желании всегда сможете обменять на реальные деньги.&nbsp; </p>
+<p>Работа в системе «Яндекс.Деньги» происходит следующим образом:</p>
+<p>1) устанавливаете на свой компьютер программу «Интернет». Кошелек и 
+кладете деньги на свой счет в процессинговом центре системы 
+«Яндекс.Деньги». Потом пополняете свой «Кошелек» определенной суммой 
+денег – переводите ее со счета в процессинговом центре. Таким образом, у
+ вас в «Кошельке» оказывается электронная наличность; </p>
+<p>2) выбираете товар или услугу в электронном магазине и отсылаете 
+заказ (рис. 5.4) – нажимаете кнопку «купить». Ваш «Кошелек» в этот 
+момент должен быть запущен. «Кошелек» продавца (магазина) выставляет 
+вашему «Кошельку» требование об оплате, содержащее текст контракта 
+(договора купли-продажи). Контракт подписан электронной цифровой 
+подписью продавца;</p>
+<p></p>
+<p><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/pic97_1.jpg" width="287" height="145"></p>
+<p>Рис. 5.4 Запрос заказа</p>
+<p></p>
+<p><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/pic97_2.jpg" width="286" height="134"></p>
+<p>Рис. 5.5 Договор купли-продажи</p>
+<p></p>
+<p>3) ваш «Кошелек» предъявляет вам текст договора. Если вы согласны, и у
+ вас достаточно денег на счету, то ваш «Кошелек» отсылает «Кошельку» 
+продавца электронные деньги и подписанный вашей электронной подписью 
+договор (рис. 5.5); </p>
+<p>4) «кошелек» продавца предъявляет полученные от вас электронные 
+деньги в процессинговый Центр для подтверждения их достоверности (рис. 
+5.6);</p>
+<p></p>
+<p><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/pic97_3.jpg" width="288" height="157"></p>
+<p>Рис. 5.6 Переход денег от кошелька покупателя к кошельку продавца</p>
+<p></p>
+<p><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/pic97_4.jpg" width="287" height="148"></p>
+<p>Рис. 5.7 Ответ продавцу о выполнении операции</p>
+<p></p>
+<p>5) в случае положительного результата проверки процессинговый Центр 
+системы «Яндекс.Деньги» зачисляет соответствующую сумму денег на счет 
+продавца. Сообщение об этом передается «Кошельку» продавца вместе с 
+«квитанцией» для вас (рис. 5.7); </p>
+<p>6) получив ответ из банка, «Кошелек» продавца передает сообщение об 
+успешном зачислении денег на его счет, и посылает «квитанцию» вашему 
+«Кошельку» (рис. 5.8). </p>
+<p></p>
+<p><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/pic98_1.jpg" width="282" height="131"></p>
+<p>Рис. 5.8 Переход квитанции в кошелек</p>
+<p></p>
+<p>7) при совершении покупки при помощи системы «Яндекс.Деньги»» вместе с
+ электронными деньгами передается и договор купли-продажи между 
+участниками сделки. Во время расчетов этот договор автоматически 
+подписывается электронными цифровыми подписями владельцев кошельков, 
+передающих и принимающих деньги согласно этому договору. Таким образом, у
+ покупателя, остается электронный документ, подтверждающий товарные 
+обязательства продавца, с его электронной подписью.</p><p></p>
+		
+			
+	<!--	
+		<link rel="stylesheet"  href="/bootstrap/css/bootstrap.css" type="text/css" />
+		<div style="border-left: 3px solid #24890d; height: 80px; margin-bottom:40px; padding-left:15px; font-size:15px;">
+			<p style="padding:5px;">
+			<b>Нужна качественная работа по этой теме? <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Срочно?</b>
+			<br>
+			<span class="glyphicon glyphicon-link" aria-hidden="true"></span> Закажи у профессионала, через <a target="_blank" href="http://www.zaochnik.com/orders/?a_aid=a6cac716">форму</a> заявки
+			<br>
+			<span class="glyphicon glyphicon-headphones" aria-hidden="true"></span> 8 (800) 100-77-13 &nbsp;&nbsp;<span style="font-size:9px;">с 7.00 до 22.00</span>
+			</p>
+		</div>
+		
+		<script type="text/javascript" src="http://www.zaochnik.com/get-a_aid-phone.php?a_aid_p=a6cac716&a_bid=07d01236&phonechan=&data1=phone"></script>	
+		<script>
+			function promo(){
+				  $( ".promo" ).toggle( "slow", function() {});
+			}
+			function scrollBottom(){
+				$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+			}
+		</script>
+	-->	
+		
+							<div class="next_block">
+				<img title="Другoе по теме &gt;" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/c_ec.png" style="" class="other">
+				<div class="other_block">
+					<div class="teas_dt" style="opacity: 0;">
+						<script type="text/javascript">
+						teasernet_blockid = 822014;
+						teasernet_padid = 297317;
+						</script>
+						<script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/1986b.js"></script><div id="" style="background: transparent none repeat scroll 0% 0%;"><center></center><iframe style="overflow: hidden; margin: 0px; padding: 0px; border: 0px none; width: 100%; height: 695px; background-color: transparent; visibility: visible;" scrolling="no" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/jsonp.html"></iframe></div>
+					</div>
+				</div>
+				<br>
+				<div style="width:100%; border-bottom:1px dashed #c5c5c5;"></div>
+				<br>
+				<br>
+				</div>
+			
+				
+	</div>
+	
+	
+		
+		
+
+
+	<div class="br_goo_3" style="text-align: center;" align="center">
+		<script async="" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/adsbygoogle.js"></script>
+		
+		<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-1597117985458814" data-ad-slot="8679531239" data-adsbygoogle-status="done"><ins id="aswift_2_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><ins id="aswift_2_anchor" style="display:block;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;border:0px;width:336px;height:280px;" width="336" height="280" frameborder="0"></iframe></ins></ins></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</div>
+	
+	<!--
+	<div  align="center" style="text-align: center;">
+	<iframe width="500" height="250" src="https://www.youtube.com/embed/GazZveBr6vs" frameborder="0" allowfullscreen></iframe>
+	</div>
+	-->
+
+	
+	<!---->
+</article><!-- #post-## -->
+
+
+
+
+
+
+
+		</div><!-- #content -->
+	</div><!-- #primary -->
+
+<div id="secondary">
+
+	
+	
+	
+		<div id="primary-sidebar" class="primary-sidebar widget-area" role="complementary">
+		
+	<br>	
+		
+		
+		
+		<div class="tn_left" align="center">
+			<script type="text/javascript">
+			teasernet_blockid = 822014;
+			teasernet_padid = 297317;
+			</script>
+			<script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/1986b.js"></script>
+		</div>
+			
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://libraryno.ru/">
+				<label>
+					<span class="screen-reader-text">Найти:</span>
+					<input type="search" class="search-field" placeholder="Поиск…" name="s" title="Найти:">
+				</label>
+				<input type="submit" class="search-submit" value="Поиск">
+			</form></aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Категории</h1>		<ul>
+	<li class="cat-item cat-item-6"><a href="http://libraryno.ru/category/bezopasnost_zhiznedejatelnosti_v_tehnosfere/">Безопасность жизнедеятельности в техносфере</a> (14)
+</li>
+	<li class="cat-item cat-item-10"><a href="http://libraryno.ru/category/buhgalterskij_uchet_analiz_i_audit/">Бухгалтерский учет, анализ и аудит</a> (5)
+</li>
+	<li class="cat-item cat-item-21"><a href="http://libraryno.ru/category/gumanitarnye_nauki/">Гуманитарные науки</a> (56)
+</li>
+	<li class="cat-item cat-item-17"><a href="http://libraryno.ru/category/estestvennye_nauki/" title="Естественные науки — научный раздел, изучающий  внешние по отношению к человеку, природные явления. Образование естественных наук на прямую связано с применением философского натурализма к научным исследованиям. Базовые принципы натурализма требуют собой изучать и использовать законы природы, не используя в них законы, придуманные человеком, т.е. исключая воздействия человеческой воли. Понятие о естественных науках введено также для их различения с гуманитарными и социальными науками.">Естественные науки</a> (20)
+</li>
+	<li class="cat-item cat-item-12"><a href="http://libraryno.ru/category/informatika_i_vychislitelnaja_tehnika/">Информатика и вычислительная техника</a> (27)
+</li>
+	<li class="cat-item cat-item-20"><a href="http://libraryno.ru/category/medicina/" title="Медицина — совокупность знаний и практических действий, применяемых с целью диагностики,  предупреждения и лечения болезней, укрепления и поддержания здоровья и трудоспособности людей.">Медицина</a> (3)
+</li>
+	<li class="cat-item cat-item-2"><a href="http://libraryno.ru/category/menedzhment_organizacii/" title="Менеджмент - это создание, контроль,  управление социально-экономическими системами в условиях рыночной экономики, цели которых обычно, являются экономическими.
+Менеджмент - это знания в области профессиональной деятельности, направленные на достижения целей системы или всей организации в целом, путем грамотного использования предоставленных ресурсов. Изначально менеджмент представлял собой теорию  управления производством, а затем преобразовался в теорию управления эффективным поведением людей в условиях трудовой деятельности.">Менеджмент организации</a> (20)
+</li>
+	<li class="cat-item cat-item-19"><a href="http://libraryno.ru/category/nauki_o_cheloveke_i_obshchestve/" title="Ряд дисциплин, изучающих различными методами (обобщение, моделирование, эксперимент, наблюдение) человека как сложную биосоциальную систему, ее структуру и функциональное многообразие.">Науки о человеке и обществе</a> (2)
+</li>
+	<li class="cat-item cat-item-16"><a href="http://libraryno.ru/category/obshhetehnicheskie_discipliny/" title="ТЕХНИЧЕСКИЕ НАУКИ — область знания, изучающая и описывающая закономерности технического мира (“второй природы”). Такие научные знания подвергаются оценке не только с точки зрения истинности, но и эффективности, т.к. создаются непосредственно для использования в инженерной деятельности и технике. 
+Еще недавно, буквально до XIX века, человечество различало только два типа наук: естественные и гуманитарные. Технические науки занимают среднее положение между этими двумя. Все потому, что техника и инженерные объекты являются продуктом человеческого разума и духа и не встречается в природе, но тем не менее, все это подчиняется тем же объективным закономерностям, что и естественные объекты.">Общетехнические дисциплины</a> (18)
+</li>
+	<li class="cat-item cat-item-7"><a href="http://libraryno.ru/category/prikladnaja_informatika_v_jekonomike/">Прикладная информатика в экономике</a> (3)
+</li>
+	<li class="cat-item cat-item-5"><a href="http://libraryno.ru/category/programmnoe_obespechenie_vychislitelnoj_tehniki_i_avtomatizirovannyh_sistem/">Программное обеспечение вычислительной техники и автоматизированных систем</a> (2)
+</li>
+	<li class="cat-item cat-item-15"><a href="http://libraryno.ru/category/other/">Прочее</a> (14)
+</li>
+	<li class="cat-item cat-item-8"><a href="http://libraryno.ru/category/socialnaja_rabota/">Социальная работа</a> (26)
+</li>
+	<li class="cat-item cat-item-4"><a href="http://libraryno.ru/category/tehnologija_mashinostroenija/">Технология машиностроения</a> (9)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://libraryno.ru/category/finansy_i_kredit/" title="Финансы и кредит являются самостоятельными экономическими разделами, описывающими экономические отношения. Вопрос о первичности кредита или финансов в обществе неоднозначный. По некоторым сведениям, сначала появилась такая экономическая категория, как кредит. Деньги образуются только на основе развития производства и товарного обращения. Возникновение кредита раньше товарно-денежных отношений позволяет говорить о том, что кредит - один из факторов их первого образования. В условиях товарно-денежных отношений финансы и кредит развиваются неразрывно, взаимно дополняя себя в обслуживании производства, распределении валового общественного продукта.">Финансы и кредит</a> (25)
+</li>
+	<li class="cat-item cat-item-14"><a href="http://libraryno.ru/category/elektrotehnika_i_promyshlennaja_elektronika/">Электротехника и промышленная электроника</a> (3)
+</li>
+	<li class="cat-item cat-item-11"><a href="http://libraryno.ru/category/jurisprudencija/" title="Юриспруденция — наука, совокупность знаний о праве. 
+Юриспруденция, как наука о государстве и праве изучает также аспекты правового регулирования и выдвигает правовые предложения о возможности внесения положительных изменений в механизм и способы регулирования.
+Юриспруденция имеет достаточно других определений, среди которых такое, как социальная наука, которая изучает права социальных норм и правовых форм деятельности и организации государств, а также политической системы общества. 
+Еще одним вариантом толкования этого понятия является теоретическая форма и способы организации и употребления юридических знаний. Обладая этими знаниями, юрист обеспечивает правопорядок и контроль соблюдения правовых норм в различных сферах жизни общества.">Юриспруденция</a> (28)
+</li>
+		</ul>
+</aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h1 class="widget-title">Свежие записи</h1>		<ul>
+					<li>
+				<a href="http://libraryno.ru/8-13-pravoprimenitel-naya-deyatel-nost-i-sredstva-massovoy-informacii-urpsix/">8.13&nbsp; Правоприменительная деятельность и средства массовой информации</a>
+						</li>
+					<li>
+				<a href="http://libraryno.ru/8-12-psihologicheskaya-harakteristika-deyatel-nosti-inspektora-gibdd-urpsix/">8.12. &nbsp;Психологическая характеристика деятельности инспектора ГИБДД</a>
+						</li>
+					<li>
+				<a href="http://libraryno.ru/8-11-psihologicheskaya-harakteristika-deyatel-nosti-uchastkovogo-inspektora-urpsix/">8.11. &nbsp;Психологическая характеристика деятельности участкового инспектора</a>
+						</li>
+					<li>
+				<a href="http://libraryno.ru/8-10-psihologicheskaya-harakteristika-deyatel-nosti-inspektora-obep-urpsix/">8.10. &nbsp;Психологическая характеристика деятельности инспектора ОБЭП</a>
+						</li>
+					<li>
+				<a href="http://libraryno.ru/8-9-psihologicheskaya-harakteristika-deyatel-nosti-inspektora-tamozhni-urpsix/">8.9. &nbsp;Психологическая характеристика деятельности инспектора таможни</a>
+						</li>
+				</ul>
+		</aside>
+	</div><!-- #primary-sidebar -->
+	</div><!-- #secondary -->
+		
+		</div><!-- #main -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo"> 
+<!--<img style="margin-right: 20px; margin-top: -50px;" align="right" src="http://libraryno.ru/tube-sample-152-214209_2.png" width="30" height="30">-->
+			
+			
+			<div class="site-info">
+		
+
+
+		
+
+			
+<!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='//www.liveinternet.ru/click' "+
+"target=_blank><img src='//counter.yadro.ru/hit?t45.5;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+
+"' alt='' title='LiveInternet' "+
+"border='0' width='31' height='31'><\/a>")
+//--></script><a href="http://www.liveinternet.ru/click" target="_blank"><img src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/hit.gif" alt="" title="LiveInternet" width="31" height="31" border="0"></a><!--/LiveInternet-->
+
+
+
+
+
+&nbsp;&nbsp;&nbsp;
+
+<div style="float: right;">
+Материал представлен на сайте исключительно в ознакомительных целях. <br>Все права принадлежат авторам этих материалов.
+</div>
+				
+				
+				
+			</div><!-- .site-info -->
+		</footer><!-- #colophon -->
+	</div><!-- #page -->
+
+	<script type="text/javascript" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/functions.js"></script>
+	
+	
+	
+	
+	<script>
+
+window.onload = function () {
+  // Определяем, не вырезана ли реклама Adsense
+  var a = document.getElementsByClassName( 'adsbygoogle' );
+ 
+  // Если да, то внутри объявляем
+  if ( a[0] && a[0].clientHeight == 0 ) { 
+    //alert("Этот сайт живёт за счёт контекстной рекламы. Пожалуйста, добавьте его в белый список Adblock");
+	$('.other').hide();
+	$('.br_goo_1').prepend('<a href="https://play.google.com/store/apps/details?id=prox.lab.calclock&referrer=utm_source%3Dlibraryno" target="_blank"><img src="http://libraryno.ru/img/web_line_1.jpg" /></a>');
+	//$('.br_goo_2').prepend('<a href="https://play.google.com/store/apps/details?id=prox.lab.calclock&referrer=utm_source%3Dlibraryno" target="_blank"><img src="http://libraryno.ru/img/web_line_1.jpg" /></a>');
+	$('.br_goo_3').prepend('<a href="https://play.google.com/store/apps/details?id=prox.lab.calclock&referrer=utm_source%3Dlibraryno" target="_blank"><img src="http://libraryno.ru/img/web_block_1.jpg" /></a>');
+
+  }
+}
+
+</script>
+	
+
+
+
+
+
+<ins class="adsbygoogle adsbygoogle-noablate" style="display: none !important;" data-adsbygoogle-status="done"><ins id="aswift_3_expand" style="display:inline-table;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><ins id="aswift_3_anchor" style="display:block;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_3" name="aswift_3" style="left:0;position:absolute;top:0;border:0px;width:0px;height:0px;" frameborder="0"></iframe></ins></ins></ins><iframe id="google_osd_static_frame_9942007585740" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;"></iframe></body><iframe id="google_esf" name="google_esf" src="5.5%C2%A0%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%D1%8B%20%D0%B8%D1%85%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20|%20%D0%AD%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F%20%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA%D0%B0_files/zrt_lookup.html" style="display: none;" data-ad-client="ca-pub-1597117985458814"></iframe></html>
+<!--<div style="width: 200px; height: 500px; background: #f9f9f9; margin-left: 1300px; display: inline-block;"></div>-->

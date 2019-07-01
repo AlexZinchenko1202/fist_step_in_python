@@ -24,5 +24,4 @@ def FUNC(name):
 	return [name+'.'+i for i in dir(eval(name))if dir(i) if "__" not in i]
 
 
-print 
-('\n').join(FUNC(name))
+print ('\n').join(FUNC(name))

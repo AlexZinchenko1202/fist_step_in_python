@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ru-RU"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <link rel="pingback" href="https://python-scripts.com/xmlrpc.php">
+    <title>Многопоточность на примерах - модуль threading</title>
+<script type="text/javascript" async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/analytics.js"></script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/osd.js"></script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/ca-pub-6166316474194592.js"></script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/show_ads_impl.js" id="google_shimpl"></script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/inferredEvents.js" async=""></script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/308845589746466" async=""></script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/identity.js" async=""></script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/all.js" async="" crossorigin="anonymous"></script><script id="facebook-jssdk" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/all_002.js"></script><script type="text/javascript" async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/watch.js"></script><script async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/fbevents.js"></script><script type="text/javascript">AP_Brushes = {"php":"PHP","css":"CSS","xml":"XML\/HTML","jscript":"Javascript","sql":"SQL","bash":"Bash\/Shell","clojure":"Clojure","cpp":"C++\/C","csharp":"C#","delphi":"Delphi","diff":"Diff","erlang":"Erlang","fsharp":"F#","groovy":"Groovy","java":"Java","javafx":"JavaFX","latex":"Latex","plain":"Plain text","matlab":"Matlabkey","objc":"Object","perl":"Perl","powershell":"PowerShell","python":"Python","r":"R","ruby":"Ruby\/Rails","scala":"Scala","vb":"VisualBasic"};</script>
+<!-- This site is optimized with the Yoast SEO plugin v11.2.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="Примеры использования модулей threading, queues для создания многопоточности в Python. Скачиваем файл из интернета используя threading и queue.">
+<link rel="canonical" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/threading_006.html">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Многопоточность на примерах - модуль threading">
+<meta property="og:description" content="Примеры использования модулей threading, queues для создания многопоточности в Python. Скачиваем файл из интернета используя threading и queue.">
+<meta property="og:url" content="https://python-scripts.com/threading">
+<meta property="og:site_name" content="Python Скрипты">
+<meta property="article:section" content="Продвинутый">
+<meta property="article:published_time" content="2017-04-11T20:47:15+00:00">
+<meta property="article:modified_time" content="2017-11-25T00:10:54+00:00">
+<meta property="og:updated_time" content="2017-11-25T00:10:54+00:00">
+<meta property="og:image" content="https://python-scripts.com/wp-content/uploads/2017/04/threading-python.jpg">
+<meta property="og:image:secure_url" content="https://python-scripts.com/wp-content/uploads/2017/04/threading-python.jpg">
+<meta property="og:image:width" content="724">
+<meta property="og:image:height" content="491">
+<script type="application/ld+json" class="yoast-schema-graph yoast-schema-graph--main">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://python-scripts.com/#organization","name":"","url":"https://python-scripts.com/","sameAs":[]},{"@type":"WebSite","@id":"https://python-scripts.com/#website","url":"https://python-scripts.com/","name":"Python \u0421\u043a\u0440\u0438\u043f\u0442\u044b","publisher":{"@id":"https://python-scripts.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://python-scripts.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"WebPage","@id":"https://python-scripts.com/threading#webpage","url":"https://python-scripts.com/threading","inLanguage":"ru-RU","name":"\u041c\u043d\u043e\u0433\u043e\u043f\u043e\u0442\u043e\u0447\u043d\u043e\u0441\u0442\u044c \u043d\u0430 \u043f\u0440\u0438\u043c\u0435\u0440\u0430\u0445 - \u043c\u043e\u0434\u0443\u043b\u044c threading","isPartOf":{"@id":"https://python-scripts.com/#website"},"image":{"@type":"ImageObject","@id":"https://python-scripts.com/threading#primaryimage","url":"https://python-scripts.com/wp-content/uploads/2017/04/threading-python.jpg","width":724,"height":491},"primaryImageOfPage":{"@id":"https://python-scripts.com/threading#primaryimage"},"datePublished":"2017-04-11T20:47:15+00:00","dateModified":"2017-11-25T00:10:54+00:00","description":"\u041f\u0440\u0438\u043c\u0435\u0440\u044b \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u044f \u043c\u043e\u0434\u0443\u043b\u0435\u0439 threading, queues \u0434\u043b\u044f \u0441\u043e\u0437\u0434\u0430\u043d\u0438\u044f \u043c\u043d\u043e\u0433\u043e\u043f\u043e\u0442\u043e\u0447\u043d\u043e\u0441\u0442\u0438 \u0432 Python. \u0421\u043a\u0430\u0447\u0438\u0432\u0430\u0435\u043c \u0444\u0430\u0439\u043b \u0438\u0437 \u0438\u043d\u0442\u0435\u0440\u043d\u0435\u0442\u0430 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044f threading \u0438 queue."},{"@type":"Article","@id":"https://python-scripts.com/threading#article","isPartOf":{"@id":"https://python-scripts.com/threading#webpage"},"author":{"@id":"https://python-scripts.com/author/monty-python#author","name":"Monty Python"},"publisher":{"@id":"https://python-scripts.com/#organization"},"headline":"\u041c\u043d\u043e\u0433\u043e\u043f\u043e\u0442\u043e\u0447\u043d\u043e\u0441\u0442\u044c \u043d\u0430 \u043f\u0440\u0438\u043c\u0435\u0440\u0430\u0445 &#8212; \u043c\u043e\u0434\u0443\u043b\u044c threading","datePublished":"2017-04-11T20:47:15+00:00","dateModified":"2017-11-25T00:10:54+00:00","commentCount":"5","mainEntityOfPage":"https://python-scripts.com/threading#webpage","image":{"@id":"https://python-scripts.com/threading#primaryimage"},"articleSection":"\u041f\u0440\u043e\u0434\u0432\u0438\u043d\u0443\u0442\u044b\u0439"},{"@type":"Person","@id":"https://python-scripts.com/author/monty-python#author","name":"Monty Python","image":{"@type":"ImageObject","@id":"https://python-scripts.com/#personlogo","url":"https://secure.gravatar.com/avatar/1ba0be86b988c5907addb9c46278d8bf?s=96&d=https%3A%2F%2Fpython-scripts.com%2Fwp-content%2Fuploads%2Fap_avatars%2F1ba0be86b988c5907addb9c46278d8bf.jpg&r=g","caption":"Monty Python"},"sameAs":[]}]}</script>
+<!-- / Yoast SEO plugin. -->
+
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="Python Скрипты » Лента" href="https://python-scripts.com/feed">
+<link rel="alternate" type="application/rss+xml" title="Python Скрипты » Лента комментариев" href="https://python-scripts.com/comments/feed">
+<link rel="alternate" type="application/rss+xml" title="Python Скрипты » Лента комментариев к «Многопоточность на примерах — модуль threading»" href="https://python-scripts.com/threading/feed">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/python-scripts.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.10"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/wp-emoji-release.js" type="text/javascript" defer="defer"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="crayon-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/crayon.css" type="text/css" media="all">
+<link rel="stylesheet" id="crayon-theme-raygun-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/raygun.css" type="text/css" media="all">
+<link rel="stylesheet" id="crayon-font-droid-sans-mono-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/droid-sans-mono.css" type="text/css" media="all">
+<link rel="stylesheet" id="mo_openid_admin_settings_style-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/mo_openid_style.css" type="text/css" media="all">
+<link rel="stylesheet" id="mo_openid_admin_settings_phone_style-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/phone.css" type="text/css" media="all">
+<link rel="stylesheet" id="mo-wp-bootstrap-social-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/bootstrap-social.css" type="text/css" media="all">
+<link rel="stylesheet" id="mo-wp-bootstrap-main-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/bootstrap.css" type="text/css" media="all">
+<link rel="stylesheet" id="mo-wp-font-awesome-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/font-awesome.css" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap_style_ass-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/bootstrap-tour-standalone.css" type="text/css" media="all">
+<link rel="stylesheet" id="sb_instagram_styles-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/sb-instagram.css" type="text/css" media="all">
+<link rel="stylesheet" id="social_media_popup_free-css-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/styles.css" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/font-awesome_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="social_media_popup_free-icons-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/icons.css" type="text/css" media="all">
+<link rel="stylesheet" id="core-front-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/na-core-front.css" type="text/css" media="all">
+<link rel="stylesheet" id="dashicons-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/dashicons.css" type="text/css" media="all">
+<link rel="stylesheet" id="to-top-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/to-top-public.css" type="text/css" media="all">
+<link rel="stylesheet" id="ye_dynamic-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/main.css" type="text/css" media="all">
+<link rel="stylesheet" id="syntaxhighlighter-core-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/shCore.css" type="text/css" media="all">
+<link rel="stylesheet" id="syntaxhighlighter-theme-default-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/shThemeDefault.css" type="text/css" media="all">
+<link rel="stylesheet" id="wide_fonts-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/css_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/bootstrap_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="wide-main-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="wide-css-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/style-default.css" type="text/css" media="all">
+<style id="wide-css-inline-css" type="text/css">
+
+		/* Custom  Font size */
+		body {
+            font-family: Alike Angular;
+		}
+	
+
+		/* Custom  Font size */
+		body ,.entry-content{
+            font-size: 16px;
+		}
+	
+</style>
+<link rel="stylesheet" id="wide-fonts-customize-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/css.css" type="text/css" media="all">
+<link rel="stylesheet" id="js_composer_custom_css-css" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/custom.css" type="text/css" media="all">
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/jquery_002.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/jquery-migrate.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"https:\/\/python-scripts.com\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/crayon.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/jquery.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/social_login.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/ckeditor.js"></script><style>.cke{visibility:hidden;}</style>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/litres_plugin.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/frontend.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var scp_cookies = {"clearCookiesMessage":"\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u0431\u0443\u0434\u0435\u0442 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u0430 \u043f\u043e\u0441\u043b\u0435 \u043e\u0447\u0438\u0441\u0442\u043a\u0438 \u043a\u0443\u043a. \u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c?","showWindowAfterReturningNDays":"3"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/cookies.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var scp = {"encodedContent":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/scripts.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var to_top_options = {"scroll_offset":"100","icon_opacity":"50","style":"icon","icon_type":"dashicons-arrow-up-alt2","icon_color":"#ffffff","icon_bg_color":"#000000","icon_size":"32","border_radius":"5","image":"https:\/\/python-scripts.com\/wp-content\/plugins\/to-top\/admin\/images\/default.png","image_width":"65","image_alt":"","location":"bottom-right","margin_x":"20","margin_y":"20","show_on_admin":"0","enable_autohide":"0","autohide_time":"2","enable_hide_small_device":"0","small_device_max_width":"640","reset":"0"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/to-top-public.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/wp-hide-post-public.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/plugins.js"></script>
+<link rel="https://api.w.org/" href="https://python-scripts.com/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://python-scripts.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://python-scripts.com/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress 4.9.10">
+<link rel="shortlink" href="https://python-scripts.com/?p=2036">
+<link rel="alternate" type="application/json+oembed" href="https://python-scripts.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fpython-scripts.com%2Fthreading">
+<link rel="alternate" type="text/xml+oembed" href="https://python-scripts.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fpython-scripts.com%2Fthreading&amp;format=xml">
+        <meta property="fb:app_id" content="">
+
+<!-- Facebook Pixel Code -->
+<script type="text/javascript">
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+</script>
+<!-- End Facebook Pixel Code -->
+<script type="text/javascript">
+  fbq('init', '308845589746466', [], {
+    "agent": "wordpress-4.9.10-1.7.25"
+});
+</script><script type="text/javascript">
+  fbq('track', 'PageView', []);
+</script>
+<!-- Facebook Pixel Code -->
+<noscript>
+<img height="1" width="1" style="display:none" alt="fbpx"
+src="https://www.facebook.com/tr?id=308845589746466&ev=PageView&noscript=1" />
+</noscript>
+<!-- End Facebook Pixel Code -->
+<meta name="generator" content="Powered by Visual Composer - drag and drop page builder for WordPress.">
+<!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="https://python-scripts.com/wp-content/plugins/js_composer/assets/css/vc_lte_ie9.min.css" media="screen"><![endif]--><link rel="icon" href="https://python-scripts.com/wp-content/uploads/2016/09/python.png" sizes="32x32">
+<link rel="icon" href="https://python-scripts.com/wp-content/uploads/2016/09/python.png" sizes="192x192">
+<link rel="apple-touch-icon-precomposed" href="https://python-scripts.com/wp-content/uploads/2016/09/python.png">
+<meta name="msapplication-TileImage" content="https://python-scripts.com/wp-content/uploads/2016/09/python.png">
+<noscript><style type="text/css"> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript><style type="text/css">/** Mega Menu CSS: fs **/</style>
+    <script charset="UTF-8" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/cfbae0c7e5ef833a5b27cb0f3f58354e_1.js" async=""></script>
+
+<script type="text/javascript" async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/embed.js"></script><script async="" type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/count.js"></script><style id="theia-sticky-sidebar-stylesheet-TSS">.theiaStickySidebar:after {content: ""; display: table; clear: both;}</style><link rel="prefetch" as="style" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/a_data/lounge.css"><link rel="prefetch" as="script" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/a_data/common.js"><link rel="prefetch" as="script" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/a_data/lounge.js"><link rel="prefetch" as="script" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/a_data/config.js"><link rel="preload" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/integrator_002.js" as="script"><script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/integrator_002.js"></script><link rel="preload" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/integrator.js" as="script"><script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/integrator.js"></script><link rel="preload" href="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/show_ads_impl.js" as="script"><script src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/alfalfa_min.js" async="" charset="UTF-8"></script><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#1d3c78;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}</style></head>
+<body class="post-template-default single single-post postid-2036 single-format-image wpb-js-composer js-comp-ver-5.0.1 vc_responsive">
+<div id="page" class="wrapper site">
+    <div class="canvas-overlay"></div>
+    <div id="header-placeholder" class="header-placeholder "></div>
+<header id="masthead" class="site-header header-left    ">
+    <div id="wide-header"><div class="slicknav_menu"><a href="#" aria-haspopup="true" tabindex="0" class="slicknav_btn slicknav_collapsed" style="outline: currentcolor none medium;"><span class="slicknav_menutxt"></span><span class="slicknav_icon slicknav_no-text"><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span></span></a><ul class="slicknav_nav slicknav_hidden" style="display: none;" aria-hidden="true" role="menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1848"><a href="https://python-scripts.com/" role="menuitem" tabindex="-1">Главная</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19407"><a href="https://python-scripts.com/forum" role="menuitem" tabindex="-1">Форум</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-post menu-item-2759"><a href="https://python-scripts.com/pycharm-download" role="menuitem" tabindex="-1">Скачать PyCharm</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2017"><a href="https://python-scripts.com/contact" role="menuitem" tabindex="-1">Контакты</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1850"><a href="https://python-scripts.com/books" role="menuitem" tabindex="-1">Книги</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1851"><a href="https://python-scripts.com/python-courses" role="menuitem" tabindex="-1">Уроки</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1852"><a href="https://python-scripts.com/" role="menuitem" tabindex="-1">Модули</a></li>
+</ul></div>
+        <!--Top bar-->
+        <div class="header-topbar">
+            <div id="wide-top-navbar" class="top-navbar hidden">
+    <div class="container">
+        <div class="row">
+            <div class="topbar-left col-xs-12 col-sm-6 col-md-6">
+
+                <div class="na-topbar clearfix">
+                    <nav id="na-top-navigation" class="collapse navbar-collapse">
+                        <ul id="menu-top" class="nav navbar-nav na-menu"><li id="menu-item-1846" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1846"><a href="https://python-scripts.com/category/gui/tkinter-python">Tkinter</a></li>
+<li id="menu-item-1847" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1847"><a href="https://python-scripts.com/category/gui/pycairo-tutorials-python">PyCairo</a></li>
+</ul>                    </nav>
+                </div>
+            </div>
+            <div class="topbar-right hidden-xs col-sm-6 col-md-6 clearfix">
+                <div id="wide_social-2" class="widget last NA_social"><div class="wide-social-icon clearfix"></div></div>            </div>
+
+        </div>
+
+    </div>
+</div>        </div>
+        <!--Logo-->
+        <div class="header-content-logo container">
+                        <div class="site-logo" id="logo">
+            <a href="https://python-scripts.com/" rel="home">
+                                        <img src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/python-logo.png" alt="Python Скрипты">
+                
+
+            </a>
+        </div>
+                            <div class="header-middle">
+                    <div id="custom_html-6" class="widget_text widget last widget_custom_html"><div class="textwidget custom-html-widget"><div style="width: 450px; height: 161px;">
+
+<div class="col-xs-6"></div>
+
+<div class="col-xs-6">
+	<noindex>
+	<span style="font-size: 24px;">Telegram Чат</span><br>
+	<a href="https://telegram.im/@python_scripts?lang=ru" rel="nofollow" target="_blank">@python_scripts</a><br><br>
+	<span style="font-size: 24px;">Telegram Канал</span><br>
+	<a href="https://telegram.im/@pip_install?lang=ru" rel="nofollow" target="_blank">@pip_install</a>
+</noindex></div>
+	
+</div></div></div>                </div>
+        </div>
+
+        <div class="header-content">
+                <div class="wide-header-content container">
+                    <!-- Menu-->
+                    <div id="na-menu-primary" class="nav-menu clearfix">
+                        <nav class="text-center na-menu-primary clearfix">
+                            <ul id="menu-menu" class="nav navbar-nav na-menu mega-menu"><li id="menu-item-1848" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1848"><a href="https://python-scripts.com/">Главная</a></li>
+<li id="menu-item-19407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19407"><a href="https://python-scripts.com/forum">Форум</a></li>
+<li id="menu-item-2759" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-2759"><a href="https://python-scripts.com/pycharm-download">Скачать PyCharm</a></li>
+<li id="menu-item-2017" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2017"><a href="https://python-scripts.com/contact">Контакты</a></li>
+<li id="menu-item-1850" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1850"><a href="https://python-scripts.com/books">Книги</a></li>
+<li id="menu-item-1851" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1851"><a href="https://python-scripts.com/python-courses">Уроки</a></li>
+<li id="menu-item-1852" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1852"><a href="https://python-scripts.com/">Модули</a></li>
+</ul>                        </nav>
+                    </div>
+                    <!--Seacrch & Cart-->
+                    <div class="header-content-right">
+                        <div class="searchform-mini hidden-sm hidden-xs">
+                            <button class="btn-mini-search"><i class="ti-search"></i></button>
+                        </div>
+                        <div class="searchform-wrap search-transition-wrap wide-hidden">
+                            <div class="search-transition-inner">
+                                <form method="get" class="searchform" action="https://python-scripts.com/">
+
+    <div class="input-group">
+        <label class="screen-reader-text">Search for:</label>
+        <input type="text" class="form-control" placeholder="Поиск ..." name="s">
+        <span class="input-group-btn">
+            <button class="btn btn-primary"><i class="ti-search"></i></button>
+        </span>
+    </div>
+
+</form>                                <button class="btn-mini-close pull-right"><i class="fa fa-close"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </div>
+    </div>
+</header><!-- .site-header -->    <div id="content" class="site-content">
+
+<div class="wrap-content" role="main">
+    <div class="container">
+        <div class="row">
+			
+                    <div id="archive-sidebar" class="sidebar sidebar-left col-sx-4 col-sm-4 col-md-4 col-lg-4 archive-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            
+
+        <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: fixed; transform: translateY(-517px); top: 0px; left: 58px; width: 379.983px;"><div class="content-inner">
+    <aside id="custom_html-2" class="widget_text widget widget_custom_html"><div class="textwidget custom-html-widget">
+
+<p align="center">
+
+<!-- PyScripts-Left-Tower -->
+<ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-6166316474194592" data-ad-slot="6727118781" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0px;width:300px;height:600px;" width="300" height="600" frameborder="0"></iframe></ins></ins></ins>
+
+	
+<br>
+	
+<ins class="adsbygoogle" style="display: inline-block; width: 320px; height: 400px;" data-ad-client="ca-pub-6166316474194592" data-ad-slot="7086942982" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:400px;margin:0;padding:0;position:relative;visibility:visible;width:320px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:400px;margin:0;padding:0;position:relative;visibility:visible;width:320px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0px;width:320px;height:400px;" width="320" height="400" frameborder="0"></iframe></ins></ins></ins>
+
+	
+</p></div></aside></div></div></div>
+    
+                    <div class="main-content  col-sx-8 col-sm-12 col-md-8 col-lg-8">
+                    <div class="content-inner">
+                    <div class="box box-article">
+    <article id="post-2036" class="post-2036 post type-post status-publish format-image has-post-thumbnail hentry category-pro-python post_format-post-format-image">
+        
+                                                <div class="post-image single-image ">
+                        <a href="https://python-scripts.com/threading"><img src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/threading-python.jpg" class="attachment-full-thumb size-full-thumb wp-post-image" alt="" srcset="https://python-scripts.com/wp-content/uploads/2017/04/threading-python.jpg 724w, https://python-scripts.com/wp-content/uploads/2017/04/threading-python-300x203.jpg 300w, https://python-scripts.com/wp-content/uploads/2017/04/threading-python-625x424.jpg 625w" sizes="(max-width: 724px) 100vw, 724px" width="724" height="491"></a>
+                    </div>
+                            
+                <div class="entry-header clearfix">
+            <div class="article-meta-single">
+                    <span class="post-cat">               <a href="https://python-scripts.com/category/pro-python" title="">Продвинутый</a>
+                           </span>
+            </div>
+
+            <header class="entry-header-title">
+                <h1 class="entry-title">Многопоточность на примерах — модуль threading</h1>            </header>
+            <!-- .entry-header -->
+        </div>
+                <div class="entry-avatar clearfix">
+            <div class="main-avt-like">
+                    <div class="by-title-date">
+                        <img alt="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/1ba0be86b988c5907addb9c46278d8bf.jpeg" srcset="https://secure.gravatar.com/avatar/1ba0be86b988c5907addb9c46278d8bf?s=100&amp;d=https%3A%2F%2Fpython-scripts.com%2Fwp-content%2Fuploads%2Fap_avatars%2F1ba0be86b988c5907addb9c46278d8bf.jpg&amp;r=g 2x" class="avatar avatar-50 photo" width="50" height="50">                        <span class="author-by">автор</span>
+                        <span class="author-title">
+                            <a class="author-link" href="https://python-scripts.com/author/monty-python" rel="author">
+                                Monty Python                            </a>
+                        </span>
+                        <span class="post-date">
+                            Апр 11, 2017                        </span>
+                    </div>
+                    <div class="view-like">
+                                            <div class="total-view post-info-item">
+                            <i class="fa fa-eye"></i> 9663                        </div>
+                                                                                                        </div>
+           </div>
+        </div>
+        <div class="entry-content">
+            <p>Python включает в себя ряд разных параллельных конструкций, таких как как <strong>threading</strong>, <strong>queues</strong> и <strong>multiprocessing</strong>. Модуль <strong>threading</strong>
+ использовался как главный способ достижения параллельности. Несколько 
+лет назад, модуль multiprocessing был добавлен в пакет стандартных 
+библиотек Python. В этой статье мы сфокусируемся на том, как 
+использовать очереди и потоки (queues и threads).</p>
+<h2>Использование потоков</h2>
+<p>Мы начнем с простого примера, который демонстрирует работу потоков. 
+Мы наследуем&nbsp;класс Thread в класс MyThread&nbsp;и укажем, чтобы его
+ имя выводилось как stdout. Попробуем!</p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5d0a604f2294c186527980" class="crayon-syntax crayon-theme-raygun crayon-font-droid-sans-mono crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><span class="crayon-title"></span>
+			<div class="crayon-tools" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 21px !important; line-height: 21px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea class="crayon-plain print-no" data-settings="dblclick" readonly="readonly" style="-moz-tab-size: 4; font-size: 15px !important; line-height: 20px !important; z-index: 0; opacity: 0; overflow: hidden;" wrap="soft"># -*- coding: utf-8 -*-
+import random
+import time
+from threading import Thread
+
+
+class MyThread(Thread):
+    """
+    A threading example
+    """
+    
+    def __init__(self, name):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.name = name
+    
+    def run(self):
+        """Запуск потока"""
+        amount = random.randint(3, 15)
+        time.sleep(amount)
+        msg = "%s is running" % self.name
+        print(msg)
+    
+def create_threads():
+    """
+    Создаем группу потоков
+    """
+    for i in range(5):
+        name = "Thread #%s" % (i+1)
+        my_thread = MyThread(name)
+        my_thread.start()
+
+
+if __name__ == "__main__":
+    create_threads()</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-2">2</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-4">4</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-6">6</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-8">8</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-10">10</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-12">12</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-14">14</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-16">16</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-18">18</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-20">20</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-22">22</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-23">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-24">24</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-25">25</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-26">26</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-27">27</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-28">28</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-29">29</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-30">30</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-31">31</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-32">32</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-33">33</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2294c186527980-34">34</div><div class="crayon-num" data-line="crayon-5d0a604f2294c186527980-35">35</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5d0a604f2294c186527980-1"><span class="crayon-c"># -*- coding: utf-8 -*-</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-2"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">random</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-3"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">time</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-4"><span class="crayon-st">from</span><span class="crayon-h"> </span><span class="crayon-k ">threading</span><span class="crayon-h"> </span><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">Thread</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-5">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-6">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-7"><span class="crayon-t">class</span><span class="crayon-h"> </span><span class="crayon-e">MyThread</span><span class="crayon-sy">(</span><span class="crayon-k ">Thread</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-8"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-9"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;A threading example</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-10"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;"""</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-11"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-12"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">name</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-13"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Инициализация потока"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-14"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">Thread</span><span class="crayon-sy">.</span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-15"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">name</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">name</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-16"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-17"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">run</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-18"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Запуск потока"""</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-19"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">amount</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">random</span><span class="crayon-sy">.</span><span class="crayon-e">randint</span><span class="crayon-sy">(</span><span class="crayon-cn">3</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">15</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-20"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">time</span><span class="crayon-sy">.</span><span class="crayon-e">sleep</span><span class="crayon-sy">(</span><span class="crayon-v">amount</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-21"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">msg</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-s">"%s is running"</span><span class="crayon-h"> </span><span class="crayon-o">%</span><span class="crayon-h"> </span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-e">name</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-22"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">print</span><span class="crayon-sy">(</span><span class="crayon-v">msg</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-23"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-24"><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">create_threads</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-25"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-26"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;Создаем группу потоков</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-27"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-28"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">for</span><span class="crayon-h"> </span><span class="crayon-i">i</span><span class="crayon-h"> </span><span class="crayon-st">in</span><span class="crayon-h"> </span><span class="crayon-k ">range</span><span class="crayon-sy">(</span><span class="crayon-cn">5</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-29"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">name</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-s">"Thread #%s"</span><span class="crayon-h"> </span><span class="crayon-o">%</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-v">i</span><span class="crayon-o">+</span><span class="crayon-cn">1</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-30"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">my_thread</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">MyThread</span><span class="crayon-sy">(</span><span class="crayon-v">name</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-31"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">my_thread</span><span class="crayon-sy">.</span><span class="crayon-e">start</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-32">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-33">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2294c186527980-34"><span class="crayon-st">if</span><span class="crayon-h"> </span><span class="crayon-v">__name__</span><span class="crayon-h"> </span><span class="crayon-o">==</span><span class="crayon-h"> </span><span class="crayon-s">"__main__"</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2294c186527980-35"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">create_threads</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0015 seconds] -->
+<p>В этом коде мы <a href="https://python-scripts.com/import-modules-python">импортировали модули</a> random и <a href="https://python-scripts.com/datetime-time-python">time</a>, также мы импортировали <a href="https://python-scripts.com/python-class">класс</a> Thread из модуля <a href="https://python-scripts.com/threading">threading Python</a>. Далее, мы &nbsp;наследуем класс <strong>Thread</strong>, и переопределили его метод __init__ для принятия аргумента, под названием name. Для начала потока, вам нужно вызывать метод <strong>start</strong>().</p>
+<div style="padding-top: 30px; padding-bottom: 30px;">
+
+<script async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: block; text-align: center; height: 179px;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-6166316474194592" data-ad-slot="7817748333" data-adsbygoogle-status="done"><ins id="aswift_2_expand" style="display:inline-table;border:none;height:179px;margin:0;padding:0;position:relative;visibility:visible;width:715px;background-color:transparent;"><ins id="aswift_2_anchor" style="display:block;border:none;height:179px;margin:0;padding:0;position:relative;visibility:visible;width:715px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;border:0px;width:715px;height:179px;" width="715" height="179" frameborder="0"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+<p>После запуска потока, он автоматически вызовет метод <strong>run</strong>. Мы переопределили <strong>метод run</strong> таким образом, чтобы он выбирал случайный отсчет времени для&nbsp;«сна». Пример <strong>random.randint</strong>
+ указывает Python выбрать случайное число от 3 до 15. После этого мы 
+указываем потоку «спать» столько секунд, сколько было выбрано случайным 
+способом, для симуляции его настоящей работы. Далее мы ввели имя потока,
+ чтобы сказать пользователю, что он закончился. Функция <strong>create_threads</strong> создаст 5 потоков, дав каждому из них уникальное имя. Если вы запустите данный код, вы увидите что-то вроде этого:</p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5d0a604f22959331203723" class="crayon-syntax crayon-theme-raygun crayon-font-droid-sans-mono crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><span class="crayon-title"></span>
+			<div class="crayon-tools" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 21px !important; line-height: 21px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea class="crayon-plain print-no" data-settings="dblclick" readonly="readonly" style="-moz-tab-size: 4; font-size: 15px !important; line-height: 20px !important; z-index: 0; opacity: 0; overflow: hidden;" wrap="soft">Thread #2 is running
+Thread #3 is running
+Thread #1 is running
+Thread #4 is running
+Thread #5 is running</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-5d0a604f22959331203723-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22959331203723-2">2</div><div class="crayon-num" data-line="crayon-5d0a604f22959331203723-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22959331203723-4">4</div><div class="crayon-num" data-line="crayon-5d0a604f22959331203723-5">5</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5d0a604f22959331203723-1">Thread #2 is running</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22959331203723-2">Thread #3 is running</div><div class="crayon-line" id="crayon-5d0a604f22959331203723-3">Thread #1 is running</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22959331203723-4">Thread #4 is running</div><div class="crayon-line" id="crayon-5d0a604f22959331203723-5">Thread #5 is running</div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0000 seconds] -->
+<p>Порядок выхода каждый раз будет разным. Попробуйте запустить код 
+несколько раз, чтобы увидеть смену порядка. Теперь давайте напишем 
+что-нибудь более практичное!</p>
+<h2>Написание потокового загрузчика</h2>
+<p>Предыдущий пример был не слишком полезным в качестве инструмента, показывающего, как именно работают <a href="https://python-scripts.com/threading">Python потоки</a>. Так что в данном примере, мы создадим класс Thread, который <strong>скачивает&nbsp;параллельно&nbsp;файлы из интернета</strong>. Мы воспользуемся бесплатным ресурсом в нашем демо. Посмотрим на код:</p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5d0a604f2295e148425806" class="crayon-syntax crayon-theme-raygun crayon-font-droid-sans-mono crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><span class="crayon-title"></span>
+			<div class="crayon-tools" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 21px !important; line-height: 21px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea class="crayon-plain print-no" data-settings="dblclick" readonly="readonly" style="-moz-tab-size: 4; font-size: 15px !important; line-height: 20px !important; z-index: 0; opacity: 0; overflow: hidden;" wrap="soft"># -*- coding: utf-8 -*-
+# Python 2.7 версии
+
+import os
+import urllib2
+from threading import Thread
+
+class DownloadThread(Thread):
+    """
+    Пример многопоточной загрузки файлов из интернета
+    """
+    
+    def __init__(self, url, name):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.name = name
+        self.url = url
+    
+    def run(self):
+        """Запуск потока"""
+        handle = urllib2.urlopen(self.url)
+        fname = os.path.basename(self.url)
+        
+        with open(fname, "wb") as f_handler:
+            while True:
+                chunk = handle.read(1024)
+                if not chunk:
+                    break
+                f_handler.write(chunk)
+        
+        msg = "%s закончил загрузку %s!" % (self.name, self.url)
+        print(msg)
+
+
+def main(urls):
+    """
+    Run the program
+    """
+    for item, url in enumerate(urls):
+        name = "Поток %s" % (item+1)
+        thread = DownloadThread(url, name)
+        thread.start()
+
+if __name__ == "__main__":
+    urls = ["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]
+    
+    main(urls)</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-2">2</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-4">4</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-6">6</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-8">8</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-10">10</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-12">12</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-14">14</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-16">16</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-18">18</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-20">20</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-22">22</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-23">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-24">24</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-25">25</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-26">26</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-27">27</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-28">28</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-29">29</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-30">30</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-31">31</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-32">32</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-33">33</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-34">34</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-35">35</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-36">36</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-37">37</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-38">38</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-39">39</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-40">40</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-41">41</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-42">42</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-43">43</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-44">44</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-45">45</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-46">46</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-47">47</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-48">48</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-49">49</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2295e148425806-50">50</div><div class="crayon-num" data-line="crayon-5d0a604f2295e148425806-51">51</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5d0a604f2295e148425806-1"><span class="crayon-c"># -*- coding: utf-8 -*-</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-2"><span class="crayon-c"># Python 2.7 версии</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-3">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-4"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">os</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-5"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">urllib2</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-6"><span class="crayon-st">from</span><span class="crayon-h"> </span><span class="crayon-k ">threading</span><span class="crayon-h"> </span><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">Thread</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-7">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-8"><span class="crayon-t">class</span><span class="crayon-h"> </span><span class="crayon-e">DownloadThread</span><span class="crayon-sy">(</span><span class="crayon-k ">Thread</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-9"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-10"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;Пример многопоточной загрузки файлов из интернета</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-11"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-12"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-13"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">url</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">name</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-14"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Инициализация потока"""</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-15"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">Thread</span><span class="crayon-sy">.</span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-16"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">name</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">name</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-17"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">url</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-18"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-19"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">run</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-20"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Запуск потока"""</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-21"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">handle</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">urllib2</span><span class="crayon-sy">.</span><span class="crayon-e">urlopen</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-22"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">fname</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">os.path</span><span class="crayon-sy">.</span><span class="crayon-e">basename</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-23"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-24"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">with</span><span class="crayon-h"> </span><span class="crayon-k ">open</span><span class="crayon-sy">(</span><span class="crayon-v">fname</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">"wb"</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-st">as</span><span class="crayon-h"> </span><span class="crayon-v">f_handler</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-25"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">while</span><span class="crayon-h"> </span><span class="crayon-t">True</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-26"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">chunk</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-v">handle</span><span class="crayon-sy">.</span><span class="crayon-e">read</span><span class="crayon-sy">(</span><span class="crayon-cn">1024</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-27"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">if</span><span class="crayon-h"> </span><span class="crayon-st">not</span><span class="crayon-h"> </span><span class="crayon-k ">chunk</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-28"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">break</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-29"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">f_handler</span><span class="crayon-sy">.</span><span class="crayon-e">write</span><span class="crayon-sy">(</span><span class="crayon-k ">chunk</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-30"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-31"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">msg</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-s">"%s закончил загрузку %s!"</span><span class="crayon-h"> </span><span class="crayon-o">%</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">name</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-32"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">print</span><span class="crayon-sy">(</span><span class="crayon-v">msg</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-33">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-34">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-35"><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">main</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-36"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-37"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;Run the program</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-38"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;"""</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-39"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">for</span><span class="crayon-h"> </span><span class="crayon-v">item</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-e">url </span><span class="crayon-st">in</span><span class="crayon-h"> </span><span class="crayon-k ">enumerate</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-40"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">name</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-s">"Поток %s"</span><span class="crayon-h"> </span><span class="crayon-o">%</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-v">item</span><span class="crayon-o">+</span><span class="crayon-cn">1</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-41"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">thread</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">DownloadThread</span><span class="crayon-sy">(</span><span class="crayon-v">url</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">name</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-42"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">thread</span><span class="crayon-sy">.</span><span class="crayon-e">start</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-43">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-44"><span class="crayon-st">if</span><span class="crayon-h"> </span><span class="crayon-v">__name__</span><span class="crayon-h"> </span><span class="crayon-o">==</span><span class="crayon-h"> </span><span class="crayon-s">"__main__"</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-45"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">urls</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-46"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040a.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040a</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-47"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040ez.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040ez</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-48"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040es.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040es</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-49"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040sb.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040sb</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2295e148425806-50"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2295e148425806-51"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">main</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0023 seconds] -->
+<p>Это, в общем, полностью переписанный первый скрипт. Здесь мы импортировали наши <a href="https://python-scripts.com/import-os-example">модули os</a>, <strong>urllib2</strong>, и <a href="https://python-scripts.com/threading">threading python</a>. Мы используем <strong>urllib2</strong>
+ для непосредственной загрузки в класс потока. Модуль os мы используем 
+для извлечения имени файла, который мы загружаем, так что мы можем 
+использовать его для создания файла с таким же названием на нашем 
+компьютере. В классе <strong>DownloadThread</strong> мы настраиваем __<strong>init</strong>__
+ для принятия url и наименований для потока. В методе run, мы открываем 
+url, извлекаем название файла, после чего используем это название для 
+того, чтобы создать файл на диске.</p>
+<div style="padding-top: 30px; padding-bottom: 30px;">
+
+<script async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: block; text-align: center; height: 179px;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-6166316474194592" data-ad-slot="7817748333" data-adsbygoogle-status="done"><ins id="aswift_3_expand" style="display:inline-table;border:none;height:179px;margin:0;padding:0;position:relative;visibility:visible;width:715px;background-color:transparent;"><ins id="aswift_3_anchor" style="display:block;border:none;height:179px;margin:0;padding:0;position:relative;visibility:visible;width:715px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_3" name="aswift_3" style="left:0;position:absolute;top:0;border:0px;width:715px;height:179px;" width="715" height="179" frameborder="0"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<div style="border: 5px dashed red; padding: 30px; margin-top: 30px; background-color: black; color: white; font-size: 23px;">
+
+Мы собрали ТОП Книг для Python программиста которые помогут быстро изучить язык программирования Python.
+Список книг: <a href="https://python-scripts.com/books" target="_blank" title="Книги по Python">Книги по Python</a>
+
+</div>
+
+</div>
+<p>После этого мы используем цикл для <strong>загрузки файла по килобайту</strong>
+ за раз, и сохранять его на диск. После того, как сохранение файла 
+завершится, мы выводим название потока и тот url, который загрузился. В 
+Python 3 этот код немного отличаться. Нам нужно импортировать urllib 
+вместо urllib2 и использовать <strong>urllib.request.urlopen</strong> вместо <strong>urllib2.urlopen</strong>. Вот код, в котором вы можете увидеть разницу:</p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5d0a604f22964464115030" class="crayon-syntax crayon-theme-raygun crayon-font-droid-sans-mono crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><span class="crayon-title"></span>
+			<div class="crayon-tools" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 21px !important; line-height: 21px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea class="crayon-plain print-no" data-settings="dblclick" readonly="readonly" style="-moz-tab-size: 4; font-size: 15px !important; line-height: 20px !important; z-index: 0; opacity: 0; overflow: hidden;" wrap="soft"># -*- coding: utf-8 -*-
+# Python 3 версии
+
+import os
+import urllib.request
+from threading import Thread
+
+class DownloadThread(Thread):
+    """
+    Пример скачивание файла используя многопоточность
+    """
+    
+    def __init__(self, url, name):
+        """Инициализация потока"""
+        Thread.__init__(self)
+        self.name = name
+        self.url = url
+    
+    def run(self):
+        """Запуск потока"""
+        handle = urllib.request.urlopen(self.url)
+        fname = os.path.basename(self.url)
+    
+        with open(fname, "wb") as f_handler:
+            while True:
+                chunk = handle.read(1024)
+                if not chunk:
+                    break
+                f_handler.write(chunk)
+        
+        msg = "%s закончил загрузку %s!" % (self.name, self.url)
+        print(msg)
+
+
+def main(urls):
+    """
+    Запускаем программу
+    """
+    for item, url in enumerate(urls):
+        name = "Поток %s" % (item+1)
+        thread = DownloadThread(url, name)
+        thread.start()
+
+if __name__ == "__main__":
+    urls = ["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]
+
+    main(urls)</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-2">2</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-4">4</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-6">6</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-8">8</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-10">10</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-12">12</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-14">14</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-16">16</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-18">18</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-20">20</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-22">22</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-23">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-24">24</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-25">25</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-26">26</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-27">27</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-28">28</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-29">29</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-30">30</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-31">31</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-32">32</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-33">33</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-34">34</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-35">35</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-36">36</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-37">37</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-38">38</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-39">39</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-40">40</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-41">41</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-42">42</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-43">43</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-44">44</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-45">45</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-46">46</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-47">47</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-48">48</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-49">49</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f22964464115030-50">50</div><div class="crayon-num" data-line="crayon-5d0a604f22964464115030-51">51</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5d0a604f22964464115030-1"><span class="crayon-c"># -*- coding: utf-8 -*-</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-2"><span class="crayon-c"># Python 3 версии</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-3">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-4"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">os</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-5"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">urllib</span><span class="crayon-sy">.</span><span class="crayon-e">request</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-6"><span class="crayon-st">from</span><span class="crayon-h"> </span><span class="crayon-k ">threading</span><span class="crayon-h"> </span><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">Thread</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-7">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-8"><span class="crayon-t">class</span><span class="crayon-h"> </span><span class="crayon-e">DownloadThread</span><span class="crayon-sy">(</span><span class="crayon-k ">Thread</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-9"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-10"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;Пример скачивание файла используя многопоточность</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-11"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-12"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-13"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">url</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">name</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-14"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Инициализация потока"""</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-15"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">Thread</span><span class="crayon-sy">.</span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-16"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">name</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">name</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-17"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">url</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-18"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-19"><span class="crayon-e">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">run</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-20"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Запуск потока"""</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-21"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">handle</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">urllib</span><span class="crayon-sy">.</span><span class="crayon-v">request</span><span class="crayon-sy">.</span><span class="crayon-e">urlopen</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-22"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">fname</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">os.path</span><span class="crayon-sy">.</span><span class="crayon-e">basename</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-23"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-24"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">with</span><span class="crayon-h"> </span><span class="crayon-k ">open</span><span class="crayon-sy">(</span><span class="crayon-v">fname</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">"wb"</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-st">as</span><span class="crayon-h"> </span><span class="crayon-v">f_handler</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-25"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">while</span><span class="crayon-h"> </span><span class="crayon-t">True</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-26"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">chunk</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-v">handle</span><span class="crayon-sy">.</span><span class="crayon-e">read</span><span class="crayon-sy">(</span><span class="crayon-cn">1024</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-27"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">if</span><span class="crayon-h"> </span><span class="crayon-st">not</span><span class="crayon-h"> </span><span class="crayon-k ">chunk</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-28"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">break</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-29"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">f_handler</span><span class="crayon-sy">.</span><span class="crayon-e">write</span><span class="crayon-sy">(</span><span class="crayon-k ">chunk</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-30"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-31"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">msg</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-s">"%s закончил загрузку %s!"</span><span class="crayon-h"> </span><span class="crayon-o">%</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">name</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-32"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">print</span><span class="crayon-sy">(</span><span class="crayon-v">msg</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-33">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-34">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f22964464115030-35"><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">main</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-36"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-37"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;Запускаем программу</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-38"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;"""</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-39"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">for</span><span class="crayon-h"> </span><span class="crayon-v">item</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-e">url </span><span class="crayon-st">in</span><span class="crayon-h"> </span><span class="crayon-k ">enumerate</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-40"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">name</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-s">"Поток %s"</span><span class="crayon-h"> </span><span class="crayon-o">%</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-v">item</span><span class="crayon-o">+</span><span class="crayon-cn">1</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-41"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">thread</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">DownloadThread</span><span class="crayon-sy">(</span><span class="crayon-v">url</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">name</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-42"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">thread</span><span class="crayon-sy">.</span><span class="crayon-e">start</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-43">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-44"><span class="crayon-st">if</span><span class="crayon-h"> </span><span class="crayon-v">__name__</span><span class="crayon-h"> </span><span class="crayon-o">==</span><span class="crayon-h"> </span><span class="crayon-s">"__main__"</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-45"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">urls</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-46"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040a.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040a</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-47"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040ez.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040ez</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-48"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040es.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040es</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-5d0a604f22964464115030-49"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040sb.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040sb</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f22964464115030-50">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f22964464115030-51"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">main</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0024 seconds] -->
+<p></p>
+<h2>Использование Queues</h2>
+<p>Очередь(<a href="https://python-scripts.com/threading">Queues Python</a>) может быть использована для стековых реализаций «<em>пришел первым – ушел первым</em>» (first-in-first-out (<strong>FIFO</strong>)) или же «пришел последним – ушел последним» (last-in-last-out (<strong>LILO</strong>)) , если вы используете их правильно.</p>
+<div style="padding-top: 30px; padding-bottom: 30px;">
+
+<script async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display: block; text-align: center; height: 179px;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-6166316474194592" data-ad-slot="7817748333" data-adsbygoogle-status="done"><ins id="aswift_4_expand" style="display:inline-table;border:none;height:179px;margin:0;padding:0;position:relative;visibility:visible;width:715px;background-color:transparent;"><ins id="aswift_4_anchor" style="display:block;border:none;height:179px;margin:0;padding:0;position:relative;visibility:visible;width:715px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_4" name="aswift_4" style="left:0;position:absolute;top:0;border:0px;width:715px;height:179px;" width="715" height="179" frameborder="0"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<div style="border: 5px dashed red; padding: 30px; margin-top: 30px; background-color: black; color: white; font-size: 23px;">
+
+Мы собрали ТОП Книг для Python программиста которые помогут быстро изучить язык программирования Python.
+Список книг: <a href="https://python-scripts.com/books" target="_blank" title="Книги по Python">Книги по Python</a>
+
+</div>
+
+</div>
+<p>В данном разделе, мы смешаем потоки и создадим простой <strong>скрипт файлового загрузчика</strong>, чтобы продемонстрировать, как работает <a href="https://python-scripts.com/threading">Queues Python</a> со случаями, которые мы хотим паралеллизировать. Чтобы помочь объяснить, как работает <strong>Queues</strong>, мы перепишем загрузочный скрипт из предыдущей секции для использования <strong>Queues</strong>. Приступим!</p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-5d0a604f2296a162102036" class="crayon-syntax crayon-theme-raygun crayon-font-droid-sans-mono crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style="margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+		
+			<div class="crayon-toolbar" data-settings=" show" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><span class="crayon-title"></span>
+			<div class="crayon-tools" style="font-size: 15px !important;height: 22.5px !important; line-height: 22.5px !important;"><div class="crayon-button crayon-nums-button crayon-pressed" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code" style="display: none;"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Python</span></div></div>
+			<div class="crayon-info" style="min-height: 21px !important; line-height: 21px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea class="crayon-plain print-no" data-settings="dblclick" readonly="readonly" style="-moz-tab-size: 4; font-size: 15px !important; line-height: 20px !important; z-index: 0; opacity: 0; overflow: hidden;" wrap="soft"># -*- coding: utf-8 -*-
+
+import os
+import threading
+import urllib.request
+from queue import Queue
+
+
+class Downloader(threading.Thread):
+    """Потоковый загрузчик файлов"""
+    
+    def __init__(self, queue):
+        """Инициализация потока"""
+        threading.Thread.__init__(self)
+        self.queue = queue
+    
+    def run(self):
+        """Запуск потока"""
+        while True:
+            # Получаем url из очереди
+            url = self.queue.get()
+            
+            # Скачиваем файл
+            self.download_file(url)
+            
+            # Отправляем сигнал о том, что задача завершена
+            self.queue.task_done()
+
+    def download_file(self, url):
+        """Скачиваем файл"""
+        handle = urllib.request.urlopen(url)
+        fname = os.path.basename(url)
+        
+        with open(fname, "wb") as f:
+            while True:
+                chunk = handle.read(1024)
+                if not chunk:
+                    break
+                f.write(chunk)
+
+def main(urls):
+    """
+    Запускаем программу
+    """
+    queue = Queue()
+    
+    # Запускаем потом и очередь
+    for i in range(5):
+        t = Downloader(queue)
+        t.setDaemon(True)
+        t.start()
+    
+    # Даем очереди нужные нам ссылки для скачивания
+    for url in urls:
+        queue.put(url)
+
+    # Ждем завершения работы очереди
+    queue.join()
+
+if __name__ == "__main__":
+    urls = ["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+            "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]
+    
+    main(urls)</textarea></div>
+			<div class="crayon-main" style="position: relative; z-index: 1; overflow: hidden;">
+				<table class="crayon-table" style="">
+					<tbody><tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-2">2</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-4">4</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-6">6</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-8">8</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-10">10</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-12">12</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-14">14</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-16">16</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-18">18</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-20">20</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-22">22</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-23">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-24">24</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-25">25</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-26">26</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-27">27</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-28">28</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-29">29</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-30">30</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-31">31</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-32">32</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-33">33</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-34">34</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-35">35</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-36">36</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-37">37</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-38">38</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-39">39</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-40">40</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-41">41</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-42">42</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-43">43</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-44">44</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-45">45</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-46">46</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-47">47</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-48">48</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-49">49</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-50">50</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-51">51</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-52">52</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-53">53</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-54">54</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-55">55</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-56">56</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-57">57</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-58">58</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-59">59</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-60">60</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-61">61</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-62">62</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-63">63</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-64">64</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-65">65</div><div class="crayon-num crayon-striped-num" data-line="crayon-5d0a604f2296a162102036-66">66</div><div class="crayon-num" data-line="crayon-5d0a604f2296a162102036-67">67</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5d0a604f2296a162102036-1"><span class="crayon-c"># -*- coding: utf-8 -*-</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-2">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-3"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">os</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-4"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">threading</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-5"><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">urllib</span><span class="crayon-sy">.</span><span class="crayon-e">request</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-6"><span class="crayon-st">from</span><span class="crayon-h"> </span><span class="crayon-k ">queue</span><span class="crayon-h"> </span><span class="crayon-r">import</span><span class="crayon-h"> </span><span class="crayon-k ">Queue</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-7">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-8">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-9"><span class="crayon-t">class</span><span class="crayon-h"> </span><span class="crayon-e">Downloader</span><span class="crayon-sy">(</span><span class="crayon-k ">threading</span><span class="crayon-sy">.</span><span class="crayon-k ">Thread</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-10"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Потоковый загрузчик файлов"""</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-11"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-12"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-k ">queue</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-13"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Инициализация потока"""</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-14"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">threading</span><span class="crayon-sy">.</span><span class="crayon-k ">Thread</span><span class="crayon-sy">.</span><span class="crayon-e">__init__</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-15"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-k ">queue</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">queue</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-16"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-17"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">run</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-18"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Запуск потока"""</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-19"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">while</span><span class="crayon-h"> </span><span class="crayon-t">True</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-20"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-c"># Получаем url из очереди</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-21"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">url</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-k ">queue</span><span class="crayon-sy">.</span><span class="crayon-e">get</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-22"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-23"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-c"># Скачиваем файл</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-24"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-e">download_file</span><span class="crayon-sy">(</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-25"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-26"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-c"># Отправляем сигнал о том, что задача завершена</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-27"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">self</span><span class="crayon-sy">.</span><span class="crayon-k ">queue</span><span class="crayon-sy">.</span><span class="crayon-e">task_done</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-28">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-29"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">download_file</span><span class="crayon-sy">(</span><span class="crayon-r">self</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">url</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-30"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""Скачиваем файл"""</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-31"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">handle</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">urllib</span><span class="crayon-sy">.</span><span class="crayon-v">request</span><span class="crayon-sy">.</span><span class="crayon-e">urlopen</span><span class="crayon-sy">(</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-32"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">fname</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">os.path</span><span class="crayon-sy">.</span><span class="crayon-e">basename</span><span class="crayon-sy">(</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-33"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-34"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">with</span><span class="crayon-h"> </span><span class="crayon-k ">open</span><span class="crayon-sy">(</span><span class="crayon-v">fname</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">"wb"</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-st">as</span><span class="crayon-h"> </span><span class="crayon-v">f</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-35"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">while</span><span class="crayon-h"> </span><span class="crayon-t">True</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-36"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">chunk</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-v">handle</span><span class="crayon-sy">.</span><span class="crayon-e">read</span><span class="crayon-sy">(</span><span class="crayon-cn">1024</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-37"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">if</span><span class="crayon-h"> </span><span class="crayon-st">not</span><span class="crayon-h"> </span><span class="crayon-k ">chunk</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-38"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">break</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-39"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">f</span><span class="crayon-sy">.</span><span class="crayon-e">write</span><span class="crayon-sy">(</span><span class="crayon-k ">chunk</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-40">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-41"><span class="crayon-r">def</span><span class="crayon-h"> </span><span class="crayon-e">main</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-42"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"""</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-43"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;Запускаем программу</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-44"><span class="crayon-s">&nbsp;&nbsp;&nbsp;&nbsp;"""</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-45"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">queue</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-k ">Queue</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-46"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-47"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-c"># Запускаем потом и очередь</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-48"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">for</span><span class="crayon-h"> </span><span class="crayon-i">i</span><span class="crayon-h"> </span><span class="crayon-st">in</span><span class="crayon-h"> </span><span class="crayon-k ">range</span><span class="crayon-sy">(</span><span class="crayon-cn">5</span><span class="crayon-sy">)</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-49"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">t</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Downloader</span><span class="crayon-sy">(</span><span class="crayon-k ">queue</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-50"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">t</span><span class="crayon-sy">.</span><span class="crayon-e">setDaemon</span><span class="crayon-sy">(</span><span class="crayon-t">True</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-51"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">t</span><span class="crayon-sy">.</span><span class="crayon-e">start</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-52"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-53"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-c"># Даем очереди нужные нам ссылки для скачивания</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-54"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-st">for</span><span class="crayon-h"> </span><span class="crayon-e">url </span><span class="crayon-st">in</span><span class="crayon-h"> </span><span class="crayon-v">urls</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-55"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">queue</span><span class="crayon-sy">.</span><span class="crayon-e">put</span><span class="crayon-sy">(</span><span class="crayon-v">url</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-56">&nbsp;</div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-57"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-c"># Ждем завершения работы очереди</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-58"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k ">queue</span><span class="crayon-sy">.</span><span class="crayon-e">join</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-59">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-60"><span class="crayon-st">if</span><span class="crayon-h"> </span><span class="crayon-v">__name__</span><span class="crayon-h"> </span><span class="crayon-o">==</span><span class="crayon-h"> </span><span class="crayon-s">"__main__"</span><span class="crayon-o">:</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-61"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">urls</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-62"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040a.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040a</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-63"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040ez.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040ez</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-64"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040es.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040es</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-65"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s">"<a class="vglnk" href="http://www.irs.gov/pub/irs-pdf/f1040sb.pdf" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>irs</span><span>.</span><span>gov</span><span>/</span><span>pub</span><span>/</span><span>irs</span><span>-</span><span>pdf</span><span>/</span><span>f1040sb</span><span>.</span><span>pdf</span></a>"</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-5d0a604f2296a162102036-66"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-5d0a604f2296a162102036-67"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">main</span><span class="crayon-sy">(</span><span class="crayon-v">urls</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</tbody></table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0028 seconds] -->
+<p>Давайте притормозим. В первую очередь, нам нужно взглянуть на 
+определение главной функции для того, чтобы увидеть, как все протекает. 
+Здесь мы видим, что она принимает список url адресов. Далее, <a href="https://python-scripts.com/functions-python">функция main</a>
+ создаете экземпляр очереди, которая передана пяти 
+демонизированным&nbsp;потокам. Основная разница между 
+демонизированным&nbsp;и недемонизированным потоком в том, что вам нужно 
+отслеживать недемонизированные потоки и закрывать их вручную, в то время
+ как поток «демон» нужно только запустить и забыть о нем. Когда ваше 
+приложение закроется, закроется и поток. Далее мы загрузили очередь (при
+ помощи метода put) вместе с переданными url. Наконец, мы указываем 
+очереди подождать, пока потоки выполнят свои процессы через <strong>метод join</strong>. В классе download у нас есть строчка <strong>self.queue.get</strong>(), которая выполняет <strong>функцию блока</strong>,
+ пока очередь делает что-либо для возврата. Это значит, что потоки 
+скромно будут дожидаться своей очереди. Также это значит, чтобы поток 
+получал что-нибудь из очереди, он должен вызывать метод очереди под 
+названием <strong>get</strong>. Таким образом, добавляя что-нибудь в 
+очередь, пул потоков, поднимет или возьмет эти объекты и обработает их. 
+Это также известно как <strong>dequeing</strong>. После того, как все 
+объекты в очередь обработаны, скрипт заканчивается и закрывается. На 
+моем компьютере были загружены первые 5 документов за секунду.</p>
+<h2>Подведем итоги</h2>
+<p>Теперь вы знаете, как использовать потоки и очереди, как в теории, 
+так и на практике. Потоки особенно полезны, когда вы создаете <a href="https://python-scripts.com/category/gui">пользовательский интерфейс</a> и вам нужно поддерживать этот интерфейс юзабельным. Без потоков, пользовательский интерфейс может <strong>перестать реагировать и виснуть</strong>,
+ пока вы загружаете большой файл, или создаете большой запрос к базе 
+данных. Во избежание этого, вам нужно выполнять длительные процессы в 
+потоках, и связать их с вашим интерфейсом.</p>
+
+        </div>
+    <!--    Author bio.-->
+        <div class="entry-footer clearfix">
+    <div class="tags-link-wrap pull-left">
+            </div>
+    <div class="comment-text pull-right">
+       <div class="social share-links clearfix" xmlns="http://www.w3.org/1999/html">
+        <ul class="social-icons list-unstyled list-inline">
+                                            </ul>
+</div>    </div>
+</div>
+<div class="entry_pagination">
+	<div class="post-pagination pagination clearfix">
+
+		
+					<a class="page-numbers pull-left page-prev" title="prev post" href="https://python-scripts.com/sqlite">
+				<i class="ti-arrow-left" aria-hidden="true"></i>
+				<span class="btn-prev">Prev</span>
+				<p class="title-pagination">Модуль sqlite - Работаем с базой данных</p>
+			</a>
+		
+					<a class="page-numbers pull-right page-next" title="next post" href="https://python-scripts.com/subprocess">
+				<span class="btn-next">Next</span>
+				<i class="ti-arrow-right" aria-hidden="true"></i>
+				<p class="title-pagination">Модуль subprocess - Работаем с процессами</p>
+			</a>
+		
+	</div>
+</div>    </article>
+</div>
+<div class="box box-author">
+    </div>
+		<div class="post-related">
+			<div class="post-box">
+				<h4 class="widgettitle">
+					Вам может быть интересно				</h4>
+			</div>
+			<div class="related-content clearfix row">
+				<div class="related-image pull-left col-md-6 col-sm-6">
+					                                                                        <div class="related-image-inner">
+                                                                        
+                                                                    <div class="post-image single-image">
+                                                    <a href="https://python-scripts.com/razrabotka-python-prilozheniy-dlya-smartfonov-kivy-protiv-beeware-project"><img src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/real_1542727491.jpg" class="attachment-full-thumb size-full-thumb wp-post-image" alt="" srcset="https://python-scripts.com/wp-content/uploads/2018/11/real_1542727491.jpg 1200w, https://python-scripts.com/wp-content/uploads/2018/11/real_1542727491-300x200.jpg 300w, https://python-scripts.com/wp-content/uploads/2018/11/real_1542727491-768x512.jpg 768w, https://python-scripts.com/wp-content/uploads/2018/11/real_1542727491-1024x683.jpg 1024w, https://python-scripts.com/wp-content/uploads/2018/11/real_1542727491-636x424.jpg 636w, https://python-scripts.com/wp-content/uploads/2018/11/real_1542727491-135x90.jpg 135w" sizes="(max-width: 1200px) 100vw, 1200px" width="1200" height="800"></a>
+                                                </div>
+                                                                        
+                                                                </div>
+                                                                        
+                                                                        
+                                                                        
+                                                                				</div>
+				<div class="related-meta pull-left col-md-6 col-sm-6 ">
+												<div class="related-meta-inner">
+								<h3 class="post-title"><a href="https://python-scripts.com/razrabotka-python-prilozheniy-dlya-smartfonov-kivy-protiv-beeware-project">Разработка Python-приложений для смартфонов: Kivy против BeeWare Project</a></h3>
+							</div>
+												<div class="related-meta-inner">
+								<h3 class="post-title"><a href="https://python-scripts.com/no-lambda">Хватит использовать lambda выражения в Python</a></h3>
+							</div>
+												<div class="related-meta-inner">
+								<h3 class="post-title"><a href="https://python-scripts.com/data-class">Полное руководство по классам данных в Python 3.7</a></h3>
+							</div>
+												<div class="related-meta-inner">
+								<h3 class="post-title"><a href="https://python-scripts.com/hpe-proliant-dl560">Четырехсокетный сервер HPE Proliant DL560: в чем преимущества</a></h3>
+							</div>
+												<div class="related-meta-inner">
+								<h3 class="post-title"><a href="https://python-scripts.com/frilans-idealnyj-sposob-zarabotka">Фриланс – идеальный способ заработка в интернете?</a></h3>
+							</div>
+					</div></div></div>
+<div id="disqus_thread"><iframe id="dsq-app1637" name="dsq-app1637" allowtransparency="true" scrolling="no" tabindex="0" title="Disqus" style="width: 1px !important; min-width: 100% !important; border: medium none !important; overflow: hidden !important; height: 1413px !important;" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/a.html" horizontalscrolling="no" verticalscrolling="no" width="100%" frameborder="0"></iframe></div>
+<script>
+    var embedVars = {"disqusConfig":{"integration":"wordpress 3.0.17"},"disqusIdentifier":"2036 https:\/\/python-scripts.com\/?p=2036","disqusShortname":"python-scripts-1","disqusTitle":"\u041c\u043d\u043e\u0433\u043e\u043f\u043e\u0442\u043e\u0447\u043d\u043e\u0441\u0442\u044c \u043d\u0430 \u043f\u0440\u0438\u043c\u0435\u0440\u0430\u0445 &#8212; \u043c\u043e\u0434\u0443\u043b\u044c threading","disqusUrl":"https:\/\/python-scripts.com\/threading","postId":2036};
+    var disqus_url = embedVars.disqusUrl;
+var disqus_identifier = embedVars.disqusIdentifier;
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = embedVars.disqusShortname;
+var disqus_title = embedVars.disqusTitle;
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    var dsqConfig = embedVars.disqusConfig;
+    this.page.integration = dsqConfig.integration;
+    this.page.remote_auth_s3 = dsqConfig.remote_auth_s3;
+    this.page.api_key = dsqConfig.api_key;
+    this.sso = dsqConfig.sso;
+    this.language = dsqConfig.language;
+
+    if (disqus_config_custom)
+        disqus_config_custom.call(this);
+};
+
+(function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+                </div>
+                    </div>
+    
+            
+        </div><!-- .content-area -->
+    </div>
+</div>
+        </div><!-- .site-content -->
+            <footer id="na-footer" class="na-footer  footer-2">
+
+        <!--    Footer center-->
+        <div class="footer-center clearfix">
+            <div class="container">
+                <div class="container-inner">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div id="about-2" class="widget first about"><h2 class="widgettitle">Обучающий Контент</h2>							<div class="about-description">
+				<span>Бесплатный обучающий контент для Python программистов.</span>
+			</div>
+		
+		<div class="wide-social-icon clearfix">
+					</div>
+		</div><div id="custom_html-5" class="widget_text widget first widget_custom_html"><div class="textwidget custom-html-widget"><noindex>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter43460914 = new Ya.Metrika({
+                    id:43460914,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/43460914" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+	
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/js.js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-65605638-3');
+</script>
+
+</noindex>
+
+<script async="" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1345352032884307",
+    enable_page_level_ads: true
+  });
+</script></div></div>                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--    Footer bottom-->
+        <div class="footer-bottom clearfix">
+            <div class="container">
+                <div class="container-inner">
+                    <div class="row">
+
+                        <div class="col-md-12 col-sm-12">
+                                                            <div class="coppy-right">
+                                                                            <span>Сообщество <a href="https://python-scripts.com/">Python</a> Программистов</span>
+                                                                    </div><!-- .site-info -->
+                                                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </footer><!-- .site-footer -->
+    <div id="scrollup" class="scrollup"><i class="fa fa-angle-up"></i></div>
+    </div><!-- .site -->
+
+<!-- Instagram Feed JS -->
+<script type="text/javascript">
+var sbiajaxurl = "https://python-scripts.com/wp-admin/admin-ajax.php";
+</script>
+<span id="to_top_scrollup" class="dashicons dashicons-arrow-up-alt2" style="opacity: 0.5; display: block;"><span class="screen-reader-text">Scroll Up</span></span><script type="text/javascript">
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"python-scripts-1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/comment_count.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var sb_instagram_js_options = {"sb_instagram_at":"","font_method":"svg"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/sb-instagram.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/na-core-front.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/comment-reply.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/dev.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/detectmobilebrowser.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var mystickyside_name = {"mystickyside_string":"#archive-sidebar","mystickyside_content_string":"#content","mystickyside_margin_top_string":"50","mystickyside_margin_bot_string":"0","mystickyside_update_sidebar_height_string":"","mystickyside_min_width_string":"0","device_desktop":"1","device_mobile":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/theia-sticky-sidebar.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/hoverIntent.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var megamenu = {"timeout":"300","interval":"100"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/maxmegamenu.js"></script>
+<script type="text/javascript" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/wp-embed.js"></script>
+
+
+
+
+
+
+<iframe style="display: none;"></iframe><ins class="adsbygoogle adsbygoogle-noablate" style="display: none !important;" data-adsbygoogle-status="done"><ins id="aswift_5_expand" style="display:inline-table;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><ins id="aswift_5_anchor" style="display:block;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_5" name="aswift_5" style="left:0;position:absolute;top:0;border:0px;width:0px;height:0px;" frameborder="0"></iframe></ins></ins></ins><iframe id="google_osd_static_frame_1453984109183" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;"></iframe><div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div><iframe name="fb_xdm_frame_https" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" style="border: medium none;" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/xd_arbiter.html" frameborder="0"></iframe></div><div><iframe name="f2fec44d3f70b74" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" style="display: none;" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/ping.html" frameborder="0"></iframe></div></div></div></body><iframe id="google_esf" name="google_esf" src="%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85%20-%20%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%20threading_files/zrt_lookup.html" style="display: none;" data-ad-client="ca-pub-6166316474194592"></iframe></html>
+<!-- Dynamic page generated in 0.183 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2019-06-19 19:18:23 -->
+<!-- Compression = gzip -->
